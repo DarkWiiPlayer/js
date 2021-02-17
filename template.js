@@ -1,4 +1,4 @@
-function setup(root) {
+const setup = (root) => {
 	root.parts = {}
 	root.querySelectorAll("[part-id]").forEach( element => {
 		root.parts[element.getAttribute("part-id")] = element
@@ -7,7 +7,7 @@ function setup(root) {
 	return root
 }
 
-function template(strings, ...args) {
+export const template = (strings, ...args) => {
 	let buf = []
 	for (i=0;i<strings.length;i++) {
 		buf.push(strings[i], args[i])

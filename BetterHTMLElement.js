@@ -1,4 +1,4 @@
-class BetterHTMLElement extends HTMLElement {
+export class BetterHTMLElement extends HTMLElement {
 	attributeChangedCallback(name, old, value) { this[name+"Changed"](value, old) }
 
 	// Array of connected callbacks
