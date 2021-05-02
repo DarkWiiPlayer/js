@@ -1,5 +1,8 @@
 export class BetterHTMLElement extends HTMLElement {
-	attributeChangedCallback(name, old, value) { if (name+"Changed" in this) this[name+"Changed"](value, old) }
+	attributeChangedCallback(attr, old, value) {
+		let name = attr.replace(/-([a-z])/, (_, l) => l.toUpperCase())
+		if (name+"Changed" in this) this[name+"Changed"](value, old)
+	}
 
 	// Array of connected callbacks
 	#connected = [];
@@ -25,24 +28,23 @@ export class BetterHTMLElement extends HTMLElement {
 		this.setContent(content)
 	}
 
-	// Fancier way to register an element
-	// TODO: Unregister old names first
-	// TODO: Register name internally
-	static set tagName(name) { customElements.define(name, this) }
-
 	// Adds property/attribute mappings to the object.
 	static initialize(name = this.name) {
 		const names = Object
 			.getOwnPropertyNames(this.prototype)
 			.filter(name => name.search(/Changed$/)+1)
 			.map(name => name.replace(/Changed$/, ''))
+		const attributes = names.map(attr => attr.replace(/([a-z])([A-Z])/g, "$1-$2").toLowerCase())
 		Object.defineProperty(this, "observedAttributes", {
-			get() { return names }
+			get() { return attributes }
 		})
-		names.forEach( attr => Object.defineProperty(this.prototype, attr, {
-			get() { return this.getAttribute(attr) },
-			set(val) { this.setAttribute(attr, val) }
-		}))
+		names.forEach(name => {
+			let attr = name.replace(/([a-z])([A-Z])/g, "$1-$2").toLowerCase()
+			Object.defineProperty(this.prototype, name, {
+				get() { return this.getAttribute(attr) },
+				set(val) { this.setAttribute(attr, val) }
+			})
+		})
 		name = name.replace(/([a-z])([A-Z])/g, "$1-$2").toLowerCase()
 		customElements.define(name, this)
 		return name
@@ -54,10 +56,11 @@ export class BetterHTMLElement extends HTMLElement {
 		constructor() {
 			super();
 			this.attachShadow({mode: "open"});
-			this.shadowRoot.innerHTML = `<h1>Hello, <span id="name"></span></h1>`
+			this.shadowRoot.innerHTML = `<h1>Hello, <span part="name"></span>!</h1>`
+			this.userName = "World";
 		}
 
-		nameChanged(name) { this.shadowRoot.querySelector("#name").innerHTML=name; }
+		userNameChanged(name) { this.shadowRoot.querySelector('[part="name"]').innerHTML = this.userName; }
 	}
 	FooBar.initialize()
 */
