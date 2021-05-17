@@ -46,7 +46,10 @@ export class BetterHTMLElement extends HTMLElement {
 			})
 		})
 		name = name.replace(/([a-z])([A-Z])/g, "$1-$2").toLowerCase()
-		customElements.define(name, this)
+		if (this.extends)
+			customElements.define(name, this, { extends: this.extends })
+		else
+			customElements.define(name, this)
 		return name
 	}
 }
