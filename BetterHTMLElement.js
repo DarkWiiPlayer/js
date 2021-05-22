@@ -1,4 +1,18 @@
 export class BetterHTMLElement extends HTMLElement {
+	#observer
+	constructor() {
+		super()
+		let object = this
+		this.#observer = new MutationObserver((list, observer) => {
+			list.forEach(m => {
+				m.target.dispatchEvent(new CustomEvent("mutation", {bubbles: true, detail: m, cancelable: true}))
+			})
+		})
+	}
+	observe(options) {
+		if (this.#observer) this.#observer.observe(this, options)
+	}
+
 	attributeChangedCallback(attr, old, value) {
 		let name = attr.replace(/-([a-z])/, (_, l) => l.toUpperCase())
 		if (name+"Changed" in this) this[name+"Changed"](value, old)
