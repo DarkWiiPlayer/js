@@ -1,3 +1,24 @@
+/*
+An improved version of the default HTMLElement that provides a bunch of nice
+things, most significantly:
+- Automatically registering the custom element type
+- Built-in event-emitting mutation observer to more easily listen to changes
+- Split attribute-changed callbacks that automatically register attributes
+
+Example:
+	class FooBar extends Better {
+		constructor() {
+			super();
+			this.attachShadow({mode: "open"});
+			this.shadowRoot.innerHTML = `<h1>Hello, <span part="name"></span>!</h1>`
+			this.userName = "World";
+		}
+
+		userNameChanged(name) { this.shadowRoot.querySelector('[part="name"]').innerHTML = this.userName; }
+	}
+	FooBar.initialize()
+*/
+
 export class Better extends HTMLElement {
 	#observer
 	constructor() {
@@ -67,17 +88,3 @@ export class Better extends HTMLElement {
 		return name
 	}
 }
-
-/* Example:
-	class FooBar extends Better {
-		constructor() {
-			super();
-			this.attachShadow({mode: "open"});
-			this.shadowRoot.innerHTML = `<h1>Hello, <span part="name"></span>!</h1>`
-			this.userName = "World";
-		}
-
-		userNameChanged(name) { this.shadowRoot.querySelector('[part="name"]').innerHTML = this.userName; }
-	}
-	FooBar.initialize()
-*/

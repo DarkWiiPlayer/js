@@ -1,3 +1,13 @@
+/*
+A somewhat refined Proxy generator that lets you selectively listen to changed
+properties and react accordingly.
+
+Example:
+	const l = listener()
+	l.listen("contract", contract => speaker.handle(contract))
+	l.contract = new Contract()
+*/
+
 export const listener = (target={}) => {
 	let callbacks = new Map()
 	function listen(prop, callback) {
