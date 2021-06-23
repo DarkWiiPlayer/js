@@ -1,4 +1,4 @@
-export class BetterHTMLElement extends HTMLElement {
+export class Better extends HTMLElement {
 	#observer
 	constructor() {
 		super()
@@ -69,7 +69,7 @@ export class BetterHTMLElement extends HTMLElement {
 }
 
 /* Example:
-	class FooBar extends BetterHTMLElement {
+	class FooBar extends Better {
 		constructor() {
 			super();
 			this.attachShadow({mode: "open"});
