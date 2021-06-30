@@ -16,7 +16,7 @@ Example:
 
 		userNameChanged(name) { this.shadowRoot.querySelector('[part="name"]').innerHTML = this.userName; }
 	}
-	FooBar.initialize()
+	FooBar.initialise()
 */
 
 export class Better extends HTMLElement {
@@ -64,7 +64,7 @@ export class Better extends HTMLElement {
 	}
 
 	// Adds property/attribute mappings to the object.
-	static initialize(name = this.name) {
+	static initialise(name = this.name) {
 		const names = Object
 			.getOwnPropertyNames(this.prototype)
 			.filter(name => name.search(/Changed$/)+1)
@@ -87,4 +87,5 @@ export class Better extends HTMLElement {
 			customElements.define(name, this)
 		return name
 	}
+	static initialize(name) { this.initialise(name) }
 }
