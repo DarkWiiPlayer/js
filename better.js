@@ -70,6 +70,7 @@ export class Better extends HTMLElement {
 			.getOwnPropertyNames(this.prototype)
 			.filter(name => name.search(/Changed$/)+1)
 			.map(name => name.replace(/Changed$/, ''))
+			.concat(this.properties ?? [])
 		const attributes = names.map(attr => attr.replace(/([a-z])([A-Z])/g, "$1-$2").toLowerCase())
 		Object.defineProperty(this, "observedAttributes", {
 			get() { return attributes }
