@@ -51,7 +51,7 @@ export class Better extends HTMLElement {
 
 	// Resolves all `connected promises
 	connectedCallback() {
-		if ("onConnec" in this) this.onConnect()
+		if ("onConnect" in this) this.onConnect()
 		this.#connected.forEach( e => e.yes(this) )
 		this.#connected = []
 	}
