@@ -56,6 +56,23 @@ export class Better extends HTMLElement {
 		this.#connected = []
 	}
 
+	// Array of disconnected callbacks
+	#disconnected = [];
+
+	// disconnectedCallback but as a promise.
+	// Resolves instantly when already disconnected and can be used more than once.
+	get disconnected() {
+		if (this.isDisconnected) return Promise.resolve(this)
+		else return new Promise( (yes, no) => this.#disconnected.push({yes, no}) )
+	}
+
+	// Resolves all `disconnected promises
+	disconnectedCallback() {
+		if ("onDisconnect" in this) this.onDisonnect()
+		this.#disconnected.forEach( e => e.yes(this) )
+		this.#disconnected = []
+	}
+
 	setContent(...content) {
 		this.innerHTML = ""
 		content.forEach( element => this.appendChild(element) )
