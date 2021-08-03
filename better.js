@@ -34,11 +34,6 @@ export class Better extends HTMLElement {
 		if (this.#observer) this.#observer.observe(this, options)
 	}
 
-	attributeChangedCallback(attr, old, value) {
-		let name = attr.replace(/-([a-z])/, (_, l) => l.toUpperCase())
-		if (name+"Changed" in this) this[name+"Changed"](value, old)
-	}
-
 	// Array of connected callbacks
 	#connected = [];
 
@@ -81,23 +76,42 @@ export class Better extends HTMLElement {
 		this.setContent(content)
 	}
 
+	attributeChangedCallback(attr, old, value) {
+		let name = attr.replace(/-([a-z])/, (_, l) => l.toUpperCase())
+		let attribute = this.constructor.attributes[name]
+		if (name+"Changed" in this)
+			if (typeof(attribute.get) == "function")
+				this[name+"Changed"](attribute.get.call(this, value), attribute.get.call(this, old))
+			else
+				this[name+"Changed"](value, old)
+	}
 	// Adds property/attribute mappings to the object.
 	static initialise(name = this.name) {
-		const names = Object
-			.getOwnPropertyNames(this.prototype)
-			.filter(name => name.search(/Changed$/)+1)
-			.map(name => name.replace(/Changed$/, ''))
-			.concat(this.properties ?? [])
-		const attributes = names.map(attr => attr.replace(/([a-z])([A-Z])/g, "$1-$2").toLowerCase())
+		let attributes = this.attributes
+			? [...Object.keys(this.attributes)]
+			: []
+		/* See HTMLElement API */
 		Object.defineProperty(this, "observedAttributes", {
-			get() { return attributes }
+			get() { return attributes.map(attr => attr.replace(/[A-Z]/, u => "-"+u.toLowerCase())) }
 		})
-		names.forEach(name => {
-			let attr = name.replace(/([a-z])([A-Z])/g, "$1-$2").toLowerCase()
-			Object.defineProperty(this.prototype, name, {
-				get() { return this.getAttribute(attr) },
-				set(val) { this.setAttribute(attr, val) }
-			})
+		attributes.forEach(name => {
+			let attribute = this.attributes[name]
+			let htmlName = name.replace(/([a-z])([A-Z])/g, "$1-$2").toLowerCase()
+			let prop = {}
+			/* Is there a get filter? */
+			if (typeof attribute.get == "function")
+				prop.get = function() { return attribute.get.call(this, this.getAttribute(htmlName)) }
+			else
+				prop.get = function() { return this.getAttribute(htmlName) }
+			/* Is there a set filter? */
+			if (typeof attribute.set == "function")
+				prop.set = function(val) { return this.setAttribute(htmlName, attribute.set.call(this, val)) }
+			else if (attribute.set === false)
+				prop.set = function(val) { throw(`Attribute ${name} cannot be set`) }
+			else
+				prop.set = function(val) { this.setAttribute(htmlName, val) }
+
+			Object.defineProperty(this.prototype, name, prop)
 		})
 		name = name.replace(/([a-z])([A-Z])/g, "$1-$2").toLowerCase()
 		if (this.extends)
