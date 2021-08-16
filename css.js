@@ -3,6 +3,8 @@ const diversify = (prefix, now, ...rest) =>
 		? now.split(/, */g).map(current => diversify(prefix+' '+current, ...rest)).join(",")
 		: prefix
 
+const keyToPropName = key => key.replace(/^[A-Z]/, a => "-"+a).replace(/[A-Z]/g, a => '-'+a.toLowerCase())
+
 const walkStyles = (styles, trail=[], buffer=[]) => {
 	let inner
 	const position = buffer.push(undefined)-1
@@ -16,7 +18,7 @@ const walkStyles = (styles, trail=[], buffer=[]) => {
 			const rules = Array.isArray(children)
 				? children.map(e => Array.isArray(e) ? e.map(e => e.toString()).join(' ') : e.toString()).join(", ")
 				: children.toString()
-			inner.push(`${name}: ${children}`)
+			inner.push(`${keyToPropName(name)}: ${children}`)
 		}
 	})
 	if (inner) buffer[position] = (`${diversify("", ...trail)} {${inner.join("; ")}}`)
