@@ -32,3 +32,5 @@ export const style = styles => {
 	style.innerHTML = css(styles)
 	return style
 }
+
+export const v = name => `var(--${keyToPropName(name)})`
