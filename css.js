@@ -33,4 +33,13 @@ export const style = styles => {
 	return style
 }
 
-export const v = name => `var(--${keyToPropName(name)})`
+const mkVar = name => {
+	const v = (def) => `var(--${name}, ${def})`
+	v.toString = () => `var(--${name})`
+	return v
+}
+
+export const v = new Proxy(Window, {
+	get: (target, name, receiver) => mkVar(name),
+	apply: (target, object, [name]) => `var(--${keyToPropName(name)})`,
+})
