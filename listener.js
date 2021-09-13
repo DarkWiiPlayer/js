@@ -8,20 +8,24 @@ Example:
 	l.contract = new Contract()
 */
 
-export const listener = (target={}) => {
+export default (target={}) => {
 	let callbacks = new Map()
 	function listen(prop, callback) {
-		if ("object" == typeof prop && "forEach" in prop)
+		if ("object" == typeof prop && "forEach" in prop) {
 			prop.forEach(prop => this.listen(prop, callback))
-		else if (callback)
-			callbacks.set(prop, callback)
-		else
+		} else if (callback) {
+			let list = callbacks.get(prop)
+			if (!list) callbacks.set(prop, list=[])
+			list.push(callback)
+		} else {
 			callbacks.delete(prop)
+		}
 	}
 	let proxy = new Proxy(target, {
 		set: (target, prop, value) => {
-			if (callbacks.has("*")) callbacks.get("*")(value, prop)
-			if (callbacks.has(prop)) callbacks.get(prop)(value, prop)
+			console.log(callbacks)
+			if (callbacks.has("*")) callbacks.get("*").forEach(callback => callback(value, prop))
+			if (callbacks.has(prop)) callbacks.get(prop).forEach(callback => callback(value, prop))
 			return Reflect.set(target, prop, value)
 		},
 		get: (target, prop, value) => {
