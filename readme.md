@@ -23,6 +23,10 @@ YAML. Or from whatever you want, really.
 A proxy object that fires a callback when certain (or all) properties are
 changed.
 
+## Speaker
+
+Simple messaging helper that uses microtasks by default.
+
 ## Skooma
 
 Generate HTML and SVG DOM nodes more easily and do stuff with them. Feels like
