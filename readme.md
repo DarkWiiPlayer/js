@@ -37,3 +37,9 @@ recommendable.
 
 Turns template literals directly into HTML templates. Just read the code, it's
 like 5 lines or so.
+
+## Storage
+
+Currently a sngle class `ObjectStorage` implementing the API of the Storage
+class using a plain JS Map as backend. This is mostly meant as a page-local
+fallback to LocalStorage and SessionStorage
