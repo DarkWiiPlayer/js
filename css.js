@@ -32,12 +32,6 @@ const walkStyles = (styles, trail=[], buffer=[]) => {
 
 export const css = (styles) => walkStyles(styles).filter(e=>e).join("\n")
 
-export const style = styles => {
-	const style = document.createElement("style")
-	style.innerHTML = css(styles)
-	return style
-}
-
 const mkVar = name => {
 	const v = (def) => `var(--${name}, ${def})`
 	v.toString = () => `var(--${name})`
