@@ -38,7 +38,9 @@ const mkVar = name => {
 	return v
 }
 
-export const v = new Proxy(Window, {
-	get: (target, name, receiver) => mkVar(name),
-	apply: (target, object, [name]) => `var(--${keyToPropName(name)})`,
+export const variable = new Proxy(Window, {
+	get: (target, name, receiver) => mkVar(keyToPropName(name)),
+	apply: (target, object, [name, value]) => value
+		? `var(--${name})`
+		: `var(--${name}, value)`
 })
