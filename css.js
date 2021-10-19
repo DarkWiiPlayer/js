@@ -23,7 +23,7 @@ const walkStyles = (styles, trail=[], buffer=[]) => {
 			const rules = Array.isArray(children)
 				? children.map(e => Array.isArray(e) ? e.map(e => e.toString()).join(' ') : e.toString()).join(", ")
 				: children.toString()
-			inner.push(`${keyToPropName(name)}: ${children}`)
+			inner.push(`${keyToPropName(name)}: ${rules}`)
 		}
 	})
 	if (inner) buffer[position] = (`${diversify("", ...trail)} {${inner.join("; ")}}`)
