@@ -24,8 +24,8 @@ export default (target={}) => {
 	let proxy = new Proxy(target, {
 		set: (target, prop, value) => {
 			console.log(callbacks)
-			if (callbacks.has("*")) callbacks.get("*").forEach(callback => callback(value, prop))
-			if (callbacks.has(prop)) callbacks.get(prop).forEach(callback => callback(value, prop))
+			if (callbacks.has("*")) callbacks.get("*").forEach(callback => callback(value, prop, target[prop]))
+			if (callbacks.has(prop)) callbacks.get(prop).forEach(callback => callback(value, prop, target[prop]))
 			return Reflect.set(target, prop, value)
 		},
 		get: (target, prop, value) => {
