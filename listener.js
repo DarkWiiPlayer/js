@@ -23,7 +23,6 @@ export default (target={}) => {
 	}
 	let proxy = new Proxy(target, {
 		set: (target, prop, value) => {
-			console.log(callbacks)
 			if (callbacks.has("*")) callbacks.get("*").forEach(callback => callback(value, prop, target[prop]))
 			if (callbacks.has(prop)) callbacks.get(prop).forEach(callback => callback(value, prop, target[prop]))
 			return Reflect.set(target, prop, value)
@@ -31,6 +30,8 @@ export default (target={}) => {
 		get: (target, prop, value) => {
 			if (prop == "listen")
 				return listen
+			else if (prop == "__raw")
+				return target
 			else
 				return Reflect.get(target, prop)
 		}
