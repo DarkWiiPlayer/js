@@ -19,8 +19,10 @@ class Speaker {
 		} else {
 			if (!this.#scheduled.length) {
 				queueMicrotask(() => {
-					for (let callback of this.#callbacks) {
-						callback(...args)
+					for (let args of this.#scheduled) {
+						for (let callback of this.#callbacks) {
+							callback(...args)
+						}
 					}
 					this.#scheduled = []
 				})
