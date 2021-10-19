@@ -1,6 +1,11 @@
 const diversify = (prefix, now, ...rest) =>
 	now
-		? now.split(/, */g).map(current => diversify(prefix+' '+current, ...rest)).join(",")
+		? now.split(/, */g)
+			.map(current => current.replace(/\$/g, '.'))
+			.map(current => current[0] == "_"
+				? diversify(prefix+current.slice(1), ...rest)
+				: diversify(prefix+' '+current, ...rest)
+			).join(",")
 		: prefix
 
 const keyToPropName = key => key.replace(/^[A-Z]/, a => "-"+a).replace(/[A-Z]/g, a => '-'+a.toLowerCase())
