@@ -43,11 +43,15 @@ use.observe(root=document)
 // child elements. Does not perform an initial run over
 // already existing elements.
 
-use.use(element)
-// Runs once on a selected element.
-// Normally not recommended.
-
 use.install()
 // Observes the entire document and performs
 // an initial scan over existing elements.
+
+use.whenReady()
+// Waits for the document to be ready, then
+// runs once on the whole document.
+
+use.use(element)
+// Runs once on a selected element.
+// Normally not recommended.
 ```

@@ -32,6 +32,13 @@ export const run = (root = document) => {
 	root.querySelectorAll("[use]").forEach(use)
 }
 
+export const whenReady = () => {
+	if (document.readyState == "complete")
+		run(document)
+	else
+		document.addEventListener("readystatechange", whenReady, {once: true})
+}
+
 export const install = () => {
 	observe(document)
 	run(document)
