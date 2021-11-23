@@ -15,6 +15,16 @@ listener.listen(prop)
 // Removes all callbacks from a given property
 ```
 
+```js
+bind(listener, "value")
+// Returns a text node with listener.value as its content
+// that will change whenever the value is changed
+bind(listener, "value", html_element)
+// Binds an existng HTML or Text node
+bind(listener, "value", html_element, value => value.toUpperCase())
+// Filters the value through a function before setting it
+```
+
 ## Example
 
 ```js

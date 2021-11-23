@@ -8,7 +8,7 @@ Example:
 	l.contract = new Contract()
 */
 
-export default (target={}) => {
+export const listener = (target={}) => {
 	let callbacks = new Map()
 	function listen(prop, callback) {
 		if ("object" == typeof prop && "forEach" in prop) {
@@ -38,3 +38,20 @@ export default (target={}) => {
 	})
 	return proxy
 }
+
+export const bind = (listener, prop, target=document.createTextNode(""), filter) => {
+	const run = data => {
+		data = filter
+			? filter(data)
+			: data
+		if ("innerText" in target)
+			target.innerText = data
+		else
+			target.data = data
+	}
+	listener.listen(prop, run)
+	run(listener[prop])
+	return target
+}
+
+export default listener
