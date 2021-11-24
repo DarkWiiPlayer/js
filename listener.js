@@ -45,7 +45,10 @@ export const bind = (listener, prop, target=document.createTextNode(""), filter)
 			? filter(data)
 			: data
 		if ("innerText" in target)
-			target.innerText = data
+			if (typeof data == "string")
+				target.innerText = data
+			else
+				target.replaceChildren(data)
 		else
 			target.data = data
 	}

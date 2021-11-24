@@ -22,7 +22,9 @@ bind(listener, "value")
 bind(listener, "value", html_element)
 // Binds an existng HTML or Text node
 bind(listener, "value", html_element, value => value.toUpperCase())
-// Filters the value through a function before setting it
+// Accepts a function to transform the value
+bind(listener, "value", html_element, value => document.createElement("hr"))
+// Also accepts HTML elements when the target is not a text node
 ```
 
 ## Example
