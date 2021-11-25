@@ -2,24 +2,24 @@ class Speaker {
 	#callbacks = new Set()
 	#immediate
 	#scheduled = []
-	#current
+	#retain
 
-	constructor(immediate, current=[]) {
+	constructor(immediate, ...initial) {
 		this.#immediate = immediate
-		this.#current = current
+		this.#retain = initial
 	}
 
 	listen(callback) {
 		this.#callbacks.add(callback)
-		return this.#current
+		return this.#retain
 	}
 
 	speak(...args) {
-		this.#current = args
 		if (this.#immediate) {
 			for (let callback of this.#callbacks) {
 				callback(...args)
 			}
+			this.#retain = args
 		} else {
 			if (!this.#scheduled.length) {
 				queueMicrotask(() => {
@@ -27,6 +27,7 @@ class Speaker {
 						for (let callback of this.#callbacks) {
 							callback(...args)
 						}
+						this.#retain = args
 					}
 					this.#scheduled = []
 				})

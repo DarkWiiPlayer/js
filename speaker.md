@@ -6,7 +6,7 @@ Callbacks are scheduled as microtasks by default.
 ## Interface:
 
 ```
-Speaker(immediate=false)
+Speaker(immediate=false, ...initial)
 // Creates a new speaker.
 Speaker.listen(callback)
 // Registers a callback.
@@ -15,6 +15,9 @@ Speaker.speak(...args)
 Speaker.silence(callback)
 // Removes a given callback
 ```
+
+The initial message is only used as the return value of `listen` before the
+first call to `speak`.
 
 ## Example
 
