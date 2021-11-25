@@ -6,7 +6,7 @@ Callbacks are scheduled as microtasks by default.
 ## Interface:
 
 ```
-Speaker(immediate=false, ...initial)
+Speaker(...initial)
 // Creates a new speaker.
 Speaker.listen(callback)
 // Registers a callback.
@@ -24,7 +24,7 @@ first call to `speak`.
 A simple example:
 
 ```js
-const speaker = new Speaker(true /* run callbacks immediately */)
+const speaker = new Speaker()
 
 speaker.listen(value => console.log(value))
 speaker.listen(value => console.warn(value))
@@ -64,3 +64,9 @@ defer(() => {
 	defer(() => console.log("This message will appear last"))
 })
 ```
+
+## ImmediateSpeaker
+
+This class may likely be renamed in the future.
+
+Extends the speaker class, but doesn't defer its callbacks to a mycrotask.

@@ -1,43 +1,47 @@
-class Speaker {
-	#callbacks = new Set()
-	#immediate
-	#scheduled = []
-	#retain
+export class Speaker {
+	_callbacks = new Set()
+	_scheduled = []
+	_retain
 
-	constructor(immediate, ...initial) {
-		this.#immediate = immediate
-		this.#retain = initial
+	constructor(...initial) {
+		this._retain = initial
 	}
 
 	listen(callback) {
-		this.#callbacks.add(callback)
-		return this.#retain
+		this._callbacks.add(callback)
+		return this._retain
 	}
 
 	speak(...args) {
-		if (this.#immediate) {
-			for (let callback of this.#callbacks) {
-				callback(...args)
-			}
-			this.#retain = args
-		} else {
-			if (!this.#scheduled.length) {
-				queueMicrotask(() => {
-					for (let args of this.#scheduled) {
-						for (let callback of this.#callbacks) {
-							callback(...args)
-						}
-						this.#retain = args
+		if (!this._scheduled.length) {
+			queueMicrotask(() => {
+				for (let args of this._scheduled) {
+					for (let callback of this._callbacks) {
+						callback(...args)
 					}
-					this.#scheduled = []
-				})
-			}
-			this.#scheduled.push(args)
+					this._retain = args
+				}
+				this._scheduled = []
+			})
 		}
+		this._scheduled.push(args)
 	}
 
-	silence(callback) {
-		this.#callbacks.delete(callbacks)
+	forget(callback) {
+		this._callbacks.delete(callbacks)
+	}
+
+	silence() {
+		this._callbacks.clear()
+	}
+}
+
+export class ImmediateSpeaker extends Speaker {
+	speak(...args) {
+		for (let callback of this._callbacks) {
+			callback(...args)
+		}
+		this._retain = args
 	}
 }
 
