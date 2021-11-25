@@ -2,16 +2,20 @@ class Speaker {
 	#callbacks = new Set()
 	#immediate
 	#scheduled = []
+	#current
 
-	constructor(immediate) {
+	constructor(immediate, current=[]) {
 		this.#immediate = immediate
+		this.#current = current
 	}
 
 	listen(callback) {
 		this.#callbacks.add(callback)
+		return this.#current
 	}
 
 	speak(...args) {
+		this.#current = args
 		if (this.#immediate) {
 			for (let callback of this.#callbacks) {
 				callback(...args)
