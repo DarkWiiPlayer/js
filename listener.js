@@ -39,7 +39,7 @@ export const listener = (target={}) => {
 	return proxy
 }
 
-export const bind = (listener, prop, target=document.createTextNode(""), filter) => {
+export const bindContent = (listener, prop="value", target=document.createTextNode(""), filter) => {
 	const run = data => {
 		data = filter
 			? filter(data)
