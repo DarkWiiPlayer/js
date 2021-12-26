@@ -57,4 +57,16 @@ export const bindContent = (listener, prop="value", target=document.createTextNo
 	return target
 }
 
+export const text = (listener, prop) => {
+	if (prop) {
+		const node = document.createTextNode(listener[prop])
+		listener.listen(prop, data => node.data = data)
+		return node
+	} else {
+		return new Proxy(listener, {
+			get: (target, prop, receiver) => text(listener, prop)
+		})
+	}
+}
+
 export default listener

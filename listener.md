@@ -16,6 +16,24 @@ listener.listen(prop)
 ```
 
 ```js
+text(listener, "property")
+// Returns a text node bound to listener.property
+text(listener)
+// Returns a text node proxy for the listener
+text(listener).property
+// Same as first example
+```
+
+When called with two arguments, this function returns a new text node that will
+automatically update to reflect the given property on the listener.
+
+When called with only the listener, it creates a proxy object that, when
+indexed, returns the result of calling `text` on the listener and the indexed
+property name.
+
+Note that repeatedly indexing the proxy will return a new text node each time.
+
+```js
 bindContent(listener, "value")
 // Returns a text node with listener.value as its content
 // that will change whenever the value is changed
