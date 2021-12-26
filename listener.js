@@ -39,24 +39,6 @@ export const listener = (target={}) => {
 	return proxy
 }
 
-export const bindContent = (listener, prop="value", target=document.createTextNode(""), filter) => {
-	const run = data => {
-		data = filter
-			? filter(data)
-			: data
-		if ("innerText" in target)
-			if (typeof data == "string")
-				target.innerText = data
-			else
-				target.replaceChildren(data)
-		else
-			target.data = data
-	}
-	listener.listen(prop, run)
-	run(listener[prop])
-	return target
-}
-
 export const text = (listener, prop) => {
 	if (prop) {
 		const node = document.createTextNode(listener[prop])

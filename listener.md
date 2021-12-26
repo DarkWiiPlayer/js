@@ -33,21 +33,6 @@ property name.
 
 Note that repeatedly indexing the proxy will return a new text node each time.
 
-```js
-bindContent(listener, "value")
-// Returns a text node with listener.value as its content
-// that will change whenever the value is changed
-bindContent(listener, "value", html_element)
-// Binds an existng HTML or Text node
-bindContent(listener, "value", html_element, value => value.toUpperCase())
-// Accepts a function to transform the value
-bindContent(listener, "value", html_element, value => document.createElement("hr"))
-// Also accepts HTML elements when the target is not a text node
-```
-
-This function *may* be **removed** in the future if it doesn't show any
-usefullnes that isn't already provided by the skooma bind function.
-
 ## Example
 
 ```js
