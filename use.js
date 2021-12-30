@@ -4,7 +4,7 @@ const apply = (func, node) => {
 	} else if ("then" in func) {
 		func.then(result => apply(result, node))
 	} else if ("default" in func) {
-		func.default(node)
+		apply(func.default, node)
 	}
 }
 
