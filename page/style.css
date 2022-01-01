@@ -1,0 +1,75 @@
+:root {
+	font-family: sans-serif;
+	--color-bg: white;
+	--color-fg: #222;
+	--color-ac: #fbb;
+	--color-hl: #f64;
+
+	--line-mid: .14rem;
+	--line-thick: .2rem;
+}
+
+* {
+	box-sizing: border-box;
+	color: var(--color-fg);
+}
+
+body {
+	background: var(--color-bg);
+
+	display: flex;
+	flex-flow: column;
+	align-items: center;
+	padding: 1em 2em;
+}
+
+body>section {
+	width: 100%;
+	max-width: 60em;
+}
+
+h2 {
+	padding: 0 1em 0 .2em;
+	width: max-content;
+	border-bottom: .1em solid var(--color-ac);
+}
+
+em {
+	font-style: normal;
+	font-weight: bold;
+}
+
+.button {
+	--color-primary: var(--color-hl);
+	--color-secondary: var(--color-bg);
+	display: inline-block;
+	transition: all .3s;
+	cursor: pointer;
+	border-radius: .3em;
+	border: var(--line-mid) var(--color-primary) solid;
+	padding: .2em .6em;
+	text-decoration: none;
+	color: var(--color-primary);
+	font-weight: bold;
+}
+
+.button:hover {
+	color: var(--color-secondary);
+	background-color: var(--color-primary);
+	text-shadow: .2em .3em .2em #0004;
+}
+
+pre>code {
+	display: block;
+	border-left: dashed var(--line-mid) var(--color-ac);
+	padding-left: 1.6em;
+}
+
+span[title] {
+	cursor: help;
+	border-bottom: dotted currentcolor .16em;
+}
+
+.all-unset {
+	all: unset;
+}
