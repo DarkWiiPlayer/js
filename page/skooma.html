@@ -1,6 +1,10 @@
 <link rel="stylesheet" href="style.css">
 
+<script type="module" src="codeblock.js"></script>
+
 <h1>Skooma.js</h1>
+
+<code-block>import {html} from 'skooma.js'</code-block>
 
 <section>
 	<h2>Introduction & Scope</h2>
@@ -17,4 +21,91 @@
 		This means you're writing plain JavaScript code that needs no additional
 		transpilation steps and runs directly in the browser.
 	</p>
+</section>
+
+<section>
+	<h2>Showcase</h2>
+
+	<p>Here's a few examples of how things are done in Skooma.js and how it compares to vanilla JavaScript.</p>
+
+	<div class="columns">
+		<h3>Skooma.js</h3>
+		<h3>Vanilla JavaScript</h3>
+
+		<p>Generating a single empty HTML element. The <code>html</code> namespace creates generator functions dynamically.</p>
+		<p>Using the browser API, this is a bit more verbose, but still looks similar.</p>
+		<code-block>
+			return html.h1()
+		</code-block>
+		<code-block>
+			return document.createElement("h1")
+		</code-block>
+
+		<p>String arguments to the generator function will be inserted as <strong>text nodes</strong>.</p>
+		<p>Without Skooma.js this would already require using a variable since <code>createElement</code> cannot insert text content into a new node.</p>
+		<code-block>
+			return html.h1("Hello, World!")
+		</code-block>
+		<code-block>
+			let h1 = document.createElement("h1")
+			h1.innerText = "Hello, World!"
+			return h1
+		</code-block>
+
+		<p>DOM Nodes can also be passed into the generator function to add them as <strong>child-elements.</strong></p>
+		<p>This would normally require two separate variables, one for each element.</p>
+		<code-block>
+			return html.div(html.b("Hello!"))
+		</code-block>
+		<code-block>
+			let div = document.createElement("div")
+			let b = document.createElement("b")
+			b.innerText = "Hello!"
+			div.append(b)
+			return div
+		</code-block>
+
+		<p>When passing an object, its key/value pairs will be added as <strong>attributes</strong> to the new element.</p>
+		<p>Once again, in plain JS this requires a variable.</p>
+		<code-block>
+			return html.div({attribute: "value"})
+		</code-block>
+		<code-block>
+			let div = document.createElement("div")
+			div.setAttribute("attribute", "value")
+			return div
+		</code-block>
+
+		<p>When an object value is a function, it will instead be added as an <strong>event handler</strong>. The corresponding key will be used as the event name.</p>
+		<p>You guessed it: variable.</p>
+		<code-block>
+			return html.button("Click Me!", {
+				click: event =&gt; console.log(event)
+			})
+		</code-block>
+		<code-block>
+			let button document.createElement("button")
+			button.innerText = "Click Me!"
+			button.addEventListener(
+				"click", event =&gt; console.log(event)
+			)
+			return button
+		</code-block>
+
+		<p>Adding a <strong>shadow-root</strong> to the new element can be done witht he <code>shadowRoot</code> property.</p>
+		<p></p>
+		<code-block>
+			return html.div({
+				shadowRoot: html.p("Shadow-DOM text content")
+			}, "Light-DOM text content")
+		</code-block>
+		<code-block>
+			let div = document.createElement("div")
+			let p = document.createElement("p")
+			p.innerText = "Shadow-DOM text content"
+			div.attachShadow({mode: "open"}).append(p)
+			div.innerText = "Light-DOM text content"
+			return div
+		</code-block>
+	</div>
 </section>

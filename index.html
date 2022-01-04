@@ -1,5 +1,7 @@
 <link rel="stylesheet" href="page/style.css">
 
+<script type="module" src="page/codeblock.js"></script>
+
 <h1>DarkWiiPlayer/JS</h1>
 <p>A JavaScript <em>micro-framework</em> to make front-end <em>easier</em></p>
 
@@ -14,15 +16,15 @@
 
 	<p>
 		<h3 class="all-unset"><b>Code Sample</b>:</h3>
-		<pre><code>
-import {html} from 'skooma.js'
+		<code-block>
+			import {html} from 'skooma.js'
 
-let div = html.div([
-	html.h1('Hello, World!'),
-	html.p('Here is some text', {class: ["class_a", "class_b"]})
-	html.button("Click Me!", { click: event => console.log(event) })
-])
-		</code></pre>
+			let div = html.div([
+				html.h1('Hello, World!'),
+				html.p('Here is some text', {class: ["class_a", "class_b"]})
+				html.button("Click Me!", { click: event => console.log(event) })
+			])
+		</code-block>
 	</p>
 
 	<a class="button" href="page/skooma.html">Read more</a>

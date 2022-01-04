@@ -39,6 +39,14 @@ em {
 	font-weight: bold;
 }
 
+hr {
+  all: unset;
+  width: 100%;
+  border-bottom: .2em solid var(--color-ac);
+  grid-column: 1 / -1;
+  margin: 1em 0;
+}
+
 .button {
 	--color-primary: var(--color-hl);
 	--color-secondary: var(--color-bg);
@@ -72,4 +80,26 @@ span[title] {
 
 .all-unset {
 	all: unset;
+}
+
+.columns {
+	display: grid;
+	grid-template-columns: repeat(2, 1fr);
+	gap: 1.4em;
+}
+.columns>* {
+	margin: 0;
+}
+
+.columns > * {
+	flex: 100%;
+}
+
+.full-width {
+	grid-column: 1/-1;
+}
+
+code-block:not(:defined) {
+	font-family: monospace;
+	white-space: pre-line;
 }
