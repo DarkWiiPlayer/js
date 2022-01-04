@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Raleway&display=swap');
+
 :root {
 	font-family: sans-serif;
 	--color-bg: white;
@@ -28,6 +30,11 @@ body>section {
 	max-width: 60em;
 }
 
+h1, h2, h3, h4, h5, h6 {
+	font-family: 'Raleway', sans-serif;
+	font-weight: normal;
+}
+
 h2 {
 	padding: 0 1em 0 .2em;
 	width: max-content;
@@ -40,11 +47,11 @@ em {
 }
 
 hr {
-  all: unset;
-  width: 100%;
-  border-bottom: .2em solid var(--color-ac);
-  grid-column: 1 / -1;
-  margin: 1em 0;
+	all: unset;
+	width: 100%;
+	border-bottom: .2em solid var(--color-ac);
+	grid-column: 1 / -1;
+	margin: 1em 0;
 }
 
 .button {
