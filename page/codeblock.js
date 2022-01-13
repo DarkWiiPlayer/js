@@ -13,7 +13,7 @@ class CodeBlock extends HTMLElement {
 		let content = this.innerHTML.replace(/^\s*\n/, "").replace(/\n\s*$/, "")
 		let prefix = new RegExp(`${content.match(/^\t*/)}`, "g")
 		content = content.replace(prefix, "").replace(/&.*;/g, str => escapes[str] ?? str)
-		this.replaceChildren(html.pre(html.code(template(hljs.highlightAuto(content).value))))
+		this.replaceChildren(html.pre(html.code(template(hljs.highlight(content, {language: 'javascript'}).value))))
 	}
 }
 
