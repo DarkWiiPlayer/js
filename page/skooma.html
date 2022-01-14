@@ -207,14 +207,10 @@
 			</dd>
 			<dt>Transform function</dt>
 			<dd>
-				A function that takes the initial or updated state and returns a new
-				HTML element.
-				<details><summary>Planned feature</summary>
-					When no HTML element is returned, nothing happens. This can be
-					used to update the existing element instead; however, the
-					function currently provides no means to access the old element in
-					the transform function.
-				</details>
+				A function that takes the initial or updated state and returns a
+				new HTML element.
+				If the function returns a non-truthy value, the element won't be
+				replaced.
 			</dd>
 		</dl>
 	</p>
@@ -225,23 +221,24 @@
 		be a function to register a callback to be called whenever the counter
 		gets updated.
 	</p>
-	<div class="columns">
-		<h3>Creating a new Element</h3>
-		<h3>Updating the old Element</h3>
-		<code-block>
-			let counterMessage = count =&gt;
-				text`Current count: ${html.b(count)}`
-			// onIncrement doesn't return an initial
-			// state, so we have to wrap it:
-			let onIncrement = bind(callback =&gt;
-				counter.onIncrement(callback) || counter.count)
+	<code-block>
+		// onIncrement doesn't return an initial state, so we have to wrap it:
+		let bindCount = bind(callback =&gt; counter.onIncrement(callback) || [counter.count])
 
-			return boundElement = onIncrement(counterMessage)
-		</code-block>
-		<code-block>
-			// Not yet implemented
-		</code-block>
-	</div>
+		let counterMessage = count =&gt; text`Current count: ${html.b(count)}`
+
+		return bindCount(counterMessage)
+	</code-block>
+
+	<p>
+		This can also be broken down to text nodes for more atomic updates.
+	</p>
+	<code-block>
+		// onIncrement doesn't return an initial state, so we have to wrap it:
+		let bindCount = bind(callback =&gt; counter.onIncrement(callback) || [counter.count])
+
+		return text`Current count: ${bindCount(text)}`
+	</code-block>
 
 	<p>
 		When an element gets replaced with a newer version of itself, any variable
