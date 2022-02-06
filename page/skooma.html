@@ -195,49 +195,66 @@
 <section>
 	<h2>The <code>bind</code> helper</h2>
 
+	<dl>
+		<code>
+			<dt>bind</dt>
+			<dd>transform-function &xrarr; update-function</dd>
+		</code>
+	</dl>
+
 	<p>
 		<dl>
-			<dt>Callback registration function</dt>
-			<dd>
-				A function that takes a callback as its single argument and returns
-				an initial state as an array of elements. The inital state will be
-				used to generate the bound element for the first time. The callback
-				function should be called whenever an update in the UI is desired
-				and the new state should be passed as its argument.
-			</dd>
 			<dt>Transform function</dt>
+			<code>
+				<dd>...data &xrarr; new-element</dd>
+			</code>
 			<dd>
-				A function that takes the initial or updated state and returns a
-				new HTML element.
-				If the function returns a non-truthy value, the element won't be
-				replaced.
+				A function that takes the current state and returns a new HTML element.
+				If the function returns a non-truthy value, the element won't be replaced.
+				<div>
+					<strong>Note:</strong> the function must return a single <em>element</em>.
+					Therefore one cannot use tagged template literals with <code>text</code>
+					as this would return a document fragment which cannot be replaced.
+				</div>
+			</dd>
+			<dt>Update function</dt>
+			<code>
+				<dd>...data &xrarr; new-element</dd>
+			</code>
+			<dd>
+				A function that passes its arguments to the transform function and
+				returns its results while also taking care of replacing the old
+				element with the new one and injecting the <code>current</code>
+				attribute into it.
 			</dd>
 		</dl>
 	</p>
 
 	<p>
-		Imagine <code>counter</code> to be an object with a <code>count</code>
-		attribute representing the current count and <code>onIncrement</code> to
-		be a function to register a callback to be called whenever the counter
-		gets updated.
+		A simple self-contained incrementing counter button could be implemented like this:
 	</p>
 	<code-block>
-		// onIncrement doesn't return an initial state, so we have to wrap it:
-		let bindCount = bind(callback =&gt; counter.onIncrement(callback) || [counter.count])
-
-		let counterMessage = count =&gt; text`Current count: ${html.b(count)}`
-
-		return bindCount(counterMessage)
+		let update = bind(count =&gt; html.button(`Count: ${count}`, {click: event =&gt; update(count+1)}))
+		document.body.append(update(1))
 	</code-block>
-
 	<p>
-		This can also be broken down to text nodes for more atomic updates.
+		The initial call of <code>update</code> sets the initial count of the
+		button, and the attached event handler updates the button every time it
+		is clicked, thereby replacing it with a new one.
+	</p>
+	<p>
+		For this next example, imagine a <code>counter</code> object that works like this:
+		<ul>
+			<li> <code>counter.count</code> returns the current count
+			<li> <code>counter.onUpdate</code> lets the user register a callback that will be called with the new count whenever the counter updates
+			<li> The counter will be updated periodically by some other part of the application
+		</ul>
+		The following code could be used to display the current count in the application:
 	</p>
 	<code-block>
-		// onIncrement doesn't return an initial state, so we have to wrap it:
-		let bindCount = bind(callback =&gt; counter.onIncrement(callback) || [counter.count])
-
-		return text`Current count: ${bindCount(text)}`
+		let update = bind(text)
+		counter.onIncrement(update)
+		return text`Current count: ${update(counter.count)}`
 	</code-block>
 
 	<p>
