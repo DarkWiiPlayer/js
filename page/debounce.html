@@ -1,0 +1,41 @@
+<link rel="stylesheet" href="style.css">
+
+<script type="module" src="codeblock.js"></script>
+<script type="module" src="filesize.js"></script>
+
+<h1 class="js module">debounce.js</h1>
+
+<code-block>import debounce from 'debounce.js'</code-block>
+
+<section>
+	<h2>Description</h2>
+	<p>
+		Utility module for debouncing user-interactions (or any other events).
+	</p>
+	<p>
+		Its main application are cases where expensive operations like updating or querying data are performed in response to some event like a user typing into a search box.
+	</p>
+	<dl>
+		<code>
+			<dt>debounce</dt>
+			<dd>target &xrarr; wrapper</dd>
+			<dd>target, timeout &xrarr; wrapper</dd>
+		</code>
+		<dd>
+			A decorator function that takes a target function and returns a wrapper that will only call the target after a set timeout expires.
+			Repeatedly calling the wrapper while the timeout is running will reset the timeout without calling the target function.
+		</dd>
+	</dl>
+
+
+	<h2>Example</h2>
+
+	<code-block>
+		const update = value =&gt; expensive_operation(value)
+
+		input.addEventListener("change", debounce(event =&gt; update(input.value)))
+	</code-block>
+
+	This code will debounce the update event handler of an input element, calling the <code>update</code>
+	function only after no changes have been made for at least one second.
+</section>

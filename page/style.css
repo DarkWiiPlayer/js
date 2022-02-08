@@ -107,7 +107,13 @@ dl>*+* { margin-top: .4em; }
 code { font-size: 1.1em; }
 
 dl>code dt, dl>code dd { all: unset;}
-dl>code dt::after { content: ' : ';}
+dl>code dt::after { content: '\00A0:\00A0';}
+
+dl>code {
+	display: grid;
+	grid-template-columns: auto 1fr;
+}
+dl>code>dt~dd { grid-column: 2/2; }
 
 .columns {
 	display: grid;

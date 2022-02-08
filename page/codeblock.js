@@ -10,9 +10,14 @@ hljs.registerLanguage('javascript', javascript);
 const escapes = { "&gt;": ">" }
 class CodeBlock extends HTMLElement {
 	connectedCallback() {
-		let content = this.innerHTML.replace(/^\s*\n/, "").replace(/\n\s*$/, "")
-		let prefix = new RegExp(`${content.match(/^\t*/)}`, "g")
-		content = content.replace(prefix, "").replace(/&.*;/g, str => escapes[str] ?? str)
+		let content = this.innerHTML
+			.replace(/^\s*\n/, "")
+			.replace(/\n\s*$/, "")
+		let prefix = new RegExp(`(?<![^\n])${content.match(/^\t*/)}`, "g")
+		console.log(prefix)
+		content = content
+			.replace(prefix, "")
+			.replace(/&[a-z]+;/g, str => escapes[str] ?? str)
 		this.replaceChildren(html.pre(html.code(template(hljs.highlight(content, {language: 'javascript'}).value))))
 	}
 }

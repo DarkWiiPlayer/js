@@ -31,5 +31,19 @@
 </section>
 
 <section>
-	<h2>Listener</h2>
+	<h2>Debounce</h2>
+	<p>
+		Debounces data like user input or events that can occur in a burst.
+	</p>
+
+	<p>
+		<h3 class="all-unset"><b>Code Sample</b>:</h3>
+		<code-block>
+			import debounce from 'debounce.js'
+
+			input.addEventListener("change", debounce(event =&gt; update(input.value)))
+		</code-block>
+	</p>
+
+	<a class="button" href="page/debounce.html">Read More</a>
 </section>
