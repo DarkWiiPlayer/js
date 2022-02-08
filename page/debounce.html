@@ -38,4 +38,15 @@
 
 	This code will debounce the update event handler of an input element, calling the <code>update</code>
 	function only after no changes have been made for at least one second.
+
+	<h2>Methods</h2>
+	<p>
+		The returned wrapper function has two methods:
+		<dl>
+			<dt><code>cancel()</code></dt>
+			<dd>Cancels the running timeout without calling the target function.</dd>
+			<dt><code>now(...)</code></dt>
+			<dd>Cancels the running timeout and calls the target function immediately.</dd>
+		</dl>
+	</p>
 </section>
