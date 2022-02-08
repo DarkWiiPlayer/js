@@ -1,79 +1,26 @@
-/*
-An improved version of the default HTMLElement that provides a bunch of nice
-things, most significantly:
-- Automatically registering the custom element type
-- Built-in event-emitting mutation observer to more easily listen to changes
-- Split attribute-changed callbacks that automatically register attributes
-
-Example:
-	class FooBar extends Better {
-		constructor() {
-			super();
-			this.attachShadow({mode: "open"});
-			this.shadowRoot.innerHTML = `<h1>Hello, <span part="name"></span>!</h1>`
-			this.userName = "World";
-		}
-
-		userNameChanged(name) { this.shadowRoot.querySelector('[part="name"]').innerHTML = this.userName; }
-	}
-	FooBar.initialise()
-*/
-
-export class Better extends HTMLElement {
-	#observer
+export default class extends HTMLElement {
 	constructor() {
 		super()
+		if (this.constructor.shadow) this.attachShadow({mode: 'open'})
 		let object = this
-		this.#observer = new MutationObserver((list, observer) => {
-			list.forEach(m => {
-				m.target.dispatchEvent(new CustomEvent("mutation", {bubbles: true, detail: m, cancelable: true}))
-			})
-		})
-	}
-	observe(options) {
-		if (this.#observer) this.#observer.observe(this, options)
 	}
 
-	// Array of connected callbacks
-	#connected = [];
-
-	// connectedCallback but as a promise.
-	// Resolves instantly when already connected and can be used more than once.
-	get connected() {
-		if (this.isConnected) return Promise.resolve(this)
-		else return new Promise( (yes, no) => this.#connected.push({yes, no}) )
+	get root() {
+		return this.shadowRoot || this
 	}
 
-	// Resolves all `connected promises
 	connectedCallback() {
 		if ("onConnect" in this) this.onConnect()
-		this.#connected.forEach( e => e.yes(this) )
-		this.#connected = []
+		this.dispatchEvent(new Event("connected"))
 	}
 
-	// Array of disconnected callbacks
-	#disconnected = [];
-
-	// disconnectedCallback but as a promise.
-	// Resolves instantly when already disconnected and can be used more than once.
-	get disconnected() {
-		if (this.isDisconnected) return Promise.resolve(this)
-		else return new Promise( (yes, no) => this.#disconnected.push({yes, no}) )
-	}
-
-	// Resolves all `disconnected promises
 	disconnectedCallback() {
 		if ("onDisconnect" in this) this.onDisonnect()
-		this.#disconnected.forEach( e => e.yes(this) )
-		this.#disconnected = []
+		this.dispatchEvent(new Event("disconnected"))
 	}
 
-	setContent(...content) {
-		this.innerHTML = ""
-		content.forEach( element => this.appendChild(element) )
-	}
 	set content(content) {
-		this.setContent(content)
+		this.root.replaceChildren(content)
 	}
 
 	attributeChangedCallback(attr, old, value) {
