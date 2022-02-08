@@ -15,5 +15,6 @@ export default (action, delay=1e3) => {
 		func.cancel()
 		return action(...args)
 	}
+	Object.defineProperty(func, "running", {get() {return Boolean(timeout)}})
 	return func
 }

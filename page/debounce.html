@@ -41,12 +41,14 @@
 
 	<h2>Methods</h2>
 	<p>
-		The returned wrapper function has two methods:
+		The returned wrapper function has the following methods and properties:
 		<dl>
 			<dt><code>cancel()</code></dt>
 			<dd>Cancels the running timeout without calling the target function.</dd>
 			<dt><code>now(...)</code></dt>
 			<dd>Cancels the running timeout and calls the target function immediately.</dd>
+			<dt><code>running</code></dt>
+			<dd><code>true</code> if there is a timeout currently running, <code>false</code> otherwise.</dd>
 		</dl>
 	</p>
 </section>
