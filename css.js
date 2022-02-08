@@ -10,6 +10,13 @@ const diversify = (prefix, now, ...rest) =>
 
 const keyToPropName = key => key.replace(/^[A-Z]/, a => "-"+a).replace(/[A-Z]/g, a => '-'+a.toLowerCase())
 
+const buildValue = value =>
+	Array.isArray(value)
+		? value.map(e => Array.isArray(e) ? e.map(e => e.toString()).join(' ') : e.toString()).join(", ")
+		: value.toString()
+
+const buildRule = (prop, value) => `${keyToPropName(prop)}: ${buildValue(value)}`
+
 const walkStyles = (styles, trail=[], buffer=[]) => {
 	let inner
 	const position = buffer.push(undefined)-1
@@ -20,17 +27,16 @@ const walkStyles = (styles, trail=[], buffer=[]) => {
 			trail.pop()
 		} else {
 			inner ||= []
-			const rules = Array.isArray(children)
-				? children.map(e => Array.isArray(e) ? e.map(e => e.toString()).join(' ') : e.toString()).join(", ")
-				: children.toString()
-			inner.push(`${keyToPropName(name)}: ${rules}`)
+			inner.push(buildRule(name, children))
 		}
 	})
 	if (inner) buffer[position] = (`${diversify("", ...trail)} {${inner.join("; ")}}`)
 	return buffer
 }
 
-export const css = (styles) => walkStyles(styles).filter(e=>e).join("\n")
+export const style = rules => Object.entries(rules).map(buildRule)
+
+export const css = styles => walkStyles(styles).filter(e=>e).join("\n")
 
 const mkVar = name => {
 	const v = (def) => `var(--${name}, ${def})`
