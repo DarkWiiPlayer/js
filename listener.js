@@ -8,6 +8,8 @@ Example:
 	l.contract = new Contract()
 */
 
+const registry = new Map()
+
 export const listener = (target={}) => {
 	let callbacks = new Map()
 	function listen(prop, callback) {
@@ -27,17 +29,15 @@ export const listener = (target={}) => {
 			if (callbacks.has(prop)) callbacks.get(prop).forEach(callback => callback(value, prop, target[prop]))
 			return Reflect.set(target, prop, value)
 		},
-		get: (target, prop, value) => {
-			if (prop == "listen")
-				return listen
-			else if (prop == "__raw")
-				return target
-			else
-				return Reflect.get(target, prop)
-		}
+		get: (target, prop, value) => prop=="listen"
+			? listen
+			: target[prop]
 	})
+	registry.set(proxy, target)
 	return proxy
 }
+
+listener.raw = proxy => registry.get(proxy)
 
 export const text = (listener, prop) => {
 	if (prop) {
