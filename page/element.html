@@ -1,0 +1,147 @@
+<link rel="stylesheet" href="style.css">
+
+<script type="module" src="codeblock.js"></script>
+<script type="module" src="filesize.js"></script>
+
+<h1 class="js module">element.js</h1>
+
+<code-block>import element from 'element.js'</code-block>
+
+<section>
+	<h2>Description</h2>
+	<p>
+		The <code>element</code> helper automates many utility features that
+		often have to be added to every new custom element, like dispatching
+		to different handler methods depending on the name of a changed attribute
+		or adding getters and setters for these attributes.
+	</p>
+</section>
+<section>
+	<h2>Basic Usage</h2>
+
+	<code-block>
+		element(class MyElement extends HTMLElement {
+			constructor() {
+				super()
+				console.log("An element walks into a bar...")
+			}
+		})
+	</code-block>
+
+	<h2>Features</h2>
+
+	<section>
+		<h3>Attributes</h3>
+		<p>
+			The static <code>attributes</code> property, when present,
+			is used to automatically add the static <code>observedAttributes</code>
+			property for the custom element API, as well as define getters and setters
+			for the listed attributes.
+		</p><p>
+			A pair of filters can be given to modify the value after getting or before
+			setting it. This can be used to convert between the string values that
+			attributes restrict us to and a more sensible representation as well as
+			some validation (attributes can be changed externally, after all).
+		</p><p>
+			Object keys in camelCase will be converted to kebab-case before being
+			used as attribute names in the auto-generated <code>observedAttributes</code>.
+		</p><p>
+			The rules are:
+			<ul>
+				<li>Any truthy value registers the attribute with getter and setter
+				<li>If the value has a <code>get</code> property, it will be incorporated as a filter into the getter.
+				<li>If the value has a <code>set</code> property, it will be incorporated as a filter into the setter.
+				<li><b>Unless</b> this value is <code>false</code> no setter will be added (read only attribute).
+			</ul>
+		</p>
+		<code-block>
+			element(class extends HTMLElement {
+				static attributes = {
+					plain = true,
+					filtered = {
+						get(string) { return Number(string) }
+						set(value) { return Math.floor(value*100+0.5)/100 }
+					},
+					plainReadOnly = { set: false },
+				}
+			})
+		</code-block>
+	</section>
+
+	<section>
+		<h3>Change Methods</h3>
+		<p>
+			The <code>attributeChangedCallback</code> method is added automatically to the class.
+			This auto-generated callback will first look up a <code>${attributeName}Changed</code>
+			method and call it, if found, with the old and new values as arguments.
+			Then it will look for a <code>changed</code> method and call it with the same arguments
+			as <code>attributeChangedCallback</code> normally receives.
+		</p><p>
+			Attribute names will be converted from camelCase to kebab-case when needed before
+			being used to form a method name to look up.
+			Changing an attribute <code>foo-bar</code> will look for a <code>fooBarChanged</code> method.
+		</p>
+		<code-block>
+			element(class extends HTMLElement {
+				static attributes = { fooBar = true }
+				fooBarChanged(oldValue, newValue) {
+					console.log(`foo-bar changed from ${oldValue} to ${newValue}`)
+				}
+			})
+		</code-block>
+	</section>
+
+	<section>
+		<h3>Batched Methods</h3>
+		<p>
+			Certain methods, like re-rendering the content of a component
+			should often happen in response to events that can happen repeatedly,
+			or in response to many different events that can all happen at once.
+		</p><p>
+			To avoid having to repeatedly add complicated checks to handle these
+			event bursts, <code>element</code> introduces the concept of <em>dollar-methods</em>.
+		</p>
+		<code-block>
+			element(class extends HTMLElement {
+				$render() {
+					console.warn("Full Re-render...")
+				}
+			})
+		</code-block>
+		<p>
+			Any method with a name starting with <code>$</code> will automatically
+			have a sibling-method defined, with the dollar removed. Each time this
+			auto-generated method is called, its argument list will be pushed to an array
+			and a call of the original dollar-method will be scheduled as a micro-task.
+		</p><p>
+			The original method will then be called with the argument-lists of the individual
+			calls to its dollar-less counterpart all at once.
+		</p><p>
+			It is of course still possible to manually call the dollar-method when
+			immediate execution is wanted.
+		</p>
+
+		<p>
+			Note how in the following example, all three change methods would be called
+			in rapid succession if the browser applies the custom element class to an element
+			it found on the page with all three attributes <code>foo</code>, <code>bar</code>
+			and <code>baz</code> defined.
+		</p>
+
+		<code-block>
+			element(class extends HTMLElement {
+				$render() { console.warn("Full Re-render...") }
+
+				fooChanged() { this.render() }
+				barChanged() { this.render() }
+				bazChanged() { this.render() }
+			})
+		</code-block>
+
+		<p>
+			Here, <code>this.render()</code> will not instantly re-render the whole component
+			but instead schedule the re-render in a micro-task, potentially avoiding lots of
+			repeated work.
+		</p>
+	</section>
+</section>

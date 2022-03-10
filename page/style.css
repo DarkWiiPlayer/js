@@ -41,6 +41,11 @@ h2 {
 	border-bottom: .1em solid var(--color-ac);
 }
 
+h3::before {
+	content: "\2023" ' ';
+	color: var(--color-ac);
+}
+
 em {
 	font-style: normal;
 	font-weight: bold;

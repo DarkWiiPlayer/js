@@ -13,6 +13,11 @@ So what does it all do?
 an "improved" version of the builtin HTMLElement that's hopefully a lot easier
 to build actual things with. It's really just another utility layer.
 
+## Element
+
+the second iteration of improved `HTMLElement` but this time in a function to
+support inheriting from other classes for extending builtin elements.
+
 ## CSS
 
 Generate CSS from JS objects. Yes, you can generate CSS from JSON now. Or from

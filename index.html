@@ -31,6 +31,31 @@
 </section>
 
 <section>
+	<h2>Element</h2>
+	<p>
+		A helper function that adds many convenient features to classes for custom elements.
+	</p>
+
+	<p>
+		<h3 class="all-unset"><b>Code Sample</b>:</h3>
+		<code-block>
+			import element from 'element.js'
+
+			element(class MyElement extends HTMLElement {
+				static attributes = { foo: true }
+				fooChanged(oldFoo, newFoo) {
+					console.log(`Foo changed from ${oldFoo} to ${newFoo}`)
+					render()
+				}
+				$render() { /* ... */ }
+			})
+		</code-block>
+	</p>
+
+	<a class="button" href="page/element.html">Read More</a>
+</section>
+
+<section>
 	<h2>Debounce</h2>
 	<p>
 		Debounces data like user input or events that can occur in a burst.
