@@ -56,6 +56,13 @@ export default Class => {
 		}
 	}
 
+	proto.insert = function(...args) {
+		return (this.shadowRoot || this).append(...args)
+	}
+	proto.replace = function(...args) {
+		return (this.shadowRoot || this).replaceChildren(...args)
+	}
+
 	Object.prototype[Symbol.toPrimitive] = function(hint) {
 		const name = `to${hint.replace(/./, e => e.toUpperCase())}`
 		return name in this
