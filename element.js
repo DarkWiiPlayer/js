@@ -41,7 +41,7 @@ export default Class => {
 	/* Enable batch-processing for dollar-methods */
 	/* This would be much nicer if decorators were a thing */
 	for (const name of Object.getOwnPropertyNames(Class.prototype)) {
-		if (name[0] == "$") {
+		if (name.startsWith("$")) {
 			const prop = Object.getOwnPropertyDescriptor(Class.prototype, name)
 			if (typeof prop.value == "function") {
 				const queue = []
@@ -52,7 +52,7 @@ export default Class => {
 					})
 					queue.push(args)
 				}
-			}
+			};
 		}
 	}
 
