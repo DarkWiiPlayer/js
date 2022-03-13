@@ -44,13 +44,15 @@ export default Class => {
 		if (name.startsWith("$")) {
 			const prop = Object.getOwnPropertyDescriptor(Class.prototype, name)
 			if (typeof prop.value == "function") {
-				const queue = []
+				Class.queues = new WeakMap()
 				Class.prototype[name.slice(1)] = function(...args) {
+					const queue = Class.queues.has(this) ? queues.get(this) : []
 					if (!queue.length) queueMicrotask(() => {
 						this[name](...queue)
 						queue.length = 0
 					})
 					queue.push(args)
+					Class.queues.set(this, queue)
 				}
 			};
 		}
