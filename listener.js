@@ -9,28 +9,33 @@ Example:
 */
 
 const registry = new Map()
-
 export const listener = (target={}) => {
-	let callbacks = new Map()
-	function listen(prop, callback) {
-		if ("object" == typeof prop && "forEach" in prop) {
-			prop.forEach(prop => this.listen(prop, callback))
-		} else if (callback) {
-			let list = callbacks.get(prop)
-			if (!list) callbacks.set(prop, list=[])
-			list.push(callback)
+	const callbacks = new Map()
+	const methods = Object.create(null)
+	methods.listen = function(name, fn, {once=false}={}) {
+		const callback = once
+			? (...args) => { this.forget(name, callback); return fn(...args) }
+			: fn
+		let set = callbacks.get(name) ?? new Set()
+		callbacks.set(name, set)
+		set.add(callback)
+	}
+	methods.forget = function(name, callback) {
+		if (callback) {
+			const set = callbacks.get(name)
+			if (set) set.delete(callback)
 		} else {
-			callbacks.delete(prop)
+			callbacks.delete(name)
 		}
 	}
 	let proxy = new Proxy(target, {
 		set: (target, prop, value) => {
-			if (callbacks.has("*")) callbacks.get("*").forEach(callback => callback(value, prop, target[prop]))
-			if (callbacks.has(prop)) callbacks.get(prop).forEach(callback => callback(value, prop, target[prop]))
+			if (callbacks.has(null)) callbacks.get(null).forEach(callback => callback(value, target[prop], prop))
+			if (callbacks.has(prop)) callbacks.get(prop).forEach(callback => callback(value, target[prop], prop))
 			return Reflect.set(target, prop, value)
 		},
-		get: (target, prop, value) => prop=="listen"
-			? listen
+		get: (target, prop, value) => prop in methods
+			? methods[prop]
 			: target[prop]
 	})
 	registry.set(proxy, target)
@@ -38,17 +43,5 @@ export const listener = (target={}) => {
 }
 
 listener.raw = proxy => registry.get(proxy)
-
-export const text = (listener, prop) => {
-	if (prop) {
-		const node = document.createTextNode(listener[prop])
-		listener.listen(prop, data => node.data = data)
-		return node
-	} else {
-		return new Proxy(listener, {
-			get: (target, prop, receiver) => text(listener, prop)
-		})
-	}
-}
 
 export default listener
