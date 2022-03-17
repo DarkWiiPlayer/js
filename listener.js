@@ -9,7 +9,7 @@ Example:
 */
 
 const registry = new Map()
-export const listener = (target={}) => {
+const listener = (target={}) => {
 	const callbacks = new Map()
 	const methods = Object.create(null)
 	methods.listen = function(name, fn, {once=false}={}) {
@@ -19,13 +19,14 @@ export const listener = (target={}) => {
 		let set = callbacks.get(name) ?? new Set()
 		callbacks.set(name, set)
 		set.add(callback)
+		return this
 	}
 	methods.forget = function(name, callback) {
 		if (callback) {
 			const set = callbacks.get(name)
-			if (set) set.delete(callback)
+			if (set) return set.delete(callback)
 		} else {
-			callbacks.delete(name)
+			return callbacks.delete(name)
 		}
 	}
 	let proxy = new Proxy(target, {
