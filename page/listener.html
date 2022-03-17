@@ -1,0 +1,125 @@
+<link rel="stylesheet" href="style.css">
+
+<script type="module" src="codeblock.js"></script>
+<script type="module" src="filesize.js"></script>
+
+<h1 class="js module">listener.js</h1>
+
+<code-block>import listener from 'listener.js'</code-block>
+
+<section>
+	<h2>Description</h2>
+	<p>
+		Listeners are special proxy objects that can trigger (one or several) callbacks when any of its properties are set.
+	</p>
+	<dl>
+		<code>
+			<dt>listener</dt>
+			<dd>target &xrarr; proxy</dd>
+			<dd><i>nil</i> &xrarr; proxy</dd>
+		</code>
+		<dd>
+			A factory function for new listener objects.
+			When an object is passed as an argument, the listener will act as a proxy for that object.
+			Otherwise a new target object is created.
+		</dd>
+	</dl>
+</section>
+
+<section>
+	<h2>Example</h2>
+
+	<code-block>
+		import MyUserComponent from '/path/to/MyUserComponent.js'
+		// Suppose this component allows the user to enter a new name
+		import backend from '/path/to/backendController.js'
+		// Suppose this class abstracts some backend API
+
+		const user = listener({name: "World"})
+		// Greet the user whenever the name changes:
+		user.listen("name", newName =&gt; alert(`Hello, ${newName}!`))
+		// Save the in the back-end whenever it changes:
+		user.listen(null, (value, old) =&gt; { if (value != old) backend.saveUserSomehow(user) }))
+
+		document.body.apend(new MyUserComponent(user))
+	</code-block>
+
+	<p>
+		This code uses a listener proxy to represent a User so it can respond whenever the user gets updated.
+	</p>
+
+</section>
+
+<section>
+	<h2>Methods</h2>
+	<p>
+		The proxy object will override the following two properties of the target object:
+		<dl>
+			<dt><code>listener.listen(&lt;prop&gt;, &lt;callback&gt;)</code></dt>
+			<dd>Registers a callback on a single property that will be called whenever the property changes.</dd>
+			<dt><code>listener.listen(null, &lt;callback&gt;)</code></dt>
+			<dd>Registers a callback that will be called whenever <em>any</em> property changes.</dd>
+			<dt><code>listener.listen(&lt;prop&gt;|null, &lt;callback&gt;, {once: true})</code></dt>
+			<dd>Registers a callback that will only be called once, then remove itself.</dd>
+			<dt><code>listener.forget(&lt;prop&gt;, &lt;callback&gt;)</code></dt>
+			<dd>Forgets a specific callback for a specific property.</dd>
+			<dt><code>listener.forget(&lt;prop&gt;)</code></dt>
+			<dd>Forgets all callbacks for a certain property.</dd>
+			<dt><code>listener.forget(null[, &lt;callback&gt;])</code></dt>
+			<dd>
+				Forgets one or all generic callbacks.
+				This will <em>not</em> delete any specific property callbacks.
+				In other words, this is not a mechanism for clearing all callbacks of a listener.
+			</dd>
+		</dl>
+	</p>
+
+	<dl>
+		<code>
+			<dt>callback</dt>
+			<dd>new, old, prop &xrarr; <i>nil</i></dd>
+			<dt>prop</dt>
+			<dd>string</dd>
+		</code>
+	</dl>
+
+	<p>
+		<strong>Note</strong> that callbacks will run regardless of whether the new and old values are actually different.
+		It is up to the user to compare the new value to the old one and possibly only take action when there is a meaningful difference.
+	</p>
+
+	<p>
+		Callbacks are internally stored as a map from property name to a set of callbacks.
+		Therefore, registering the same callback on the same property more than once will have no effect;
+		the callback will only be called once for every property change.
+	</p>
+
+	<p>
+		<strong>Note</strong> that one-time callbacks registered with <code>{once: true}</code> will generate
+		a new wrapper function that removes itself before calling the actual callback.
+		This has two implications:
+		<ul>
+			<li> One-time callbacks cannot be forgotten by passing the original function, as that is not the callback that is saved internally
+			<li> Adding the same one-time callback repeatedly will generate a new (unique) wrapper every time, so they will also run more than once
+		</ul>
+		This behaviour of one-time callbacks <em>may</em> change in the future and should <em>not</em> be relied on.
+	</p>
+
+	<p>
+		Additionally, the <code>listener</code> factory itself has the following method<!-- Change to plural when adding more! -->:
+		<dl>
+			<code>
+				<dt>listener.raw</dt>
+				<dd>proxy &rarr; target</dd>
+			</code>
+			<dd>
+				This static method can be used to retrieve the target object for a given listener proxy.
+			</dd>
+		</dl>
+	</p>
+	<p>
+		<strong>Note</strong> that callbacks will only trigger when the property is set via the proxy object.
+		Changing the raw object directly will not trigger any callbacks as javascript provides
+		no mechanism to detect such property changes on plain objects.
+	</p>
+</section>

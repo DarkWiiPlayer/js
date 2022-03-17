@@ -5,53 +5,28 @@ A generator for proxy objects that run callbacks when properties are changed.
 ## Interface
 
 ```js
-listener(target={})
-// Creates a new proxy for target
+listener()
+// Creates a new listener object
+listener(some_object)
+// Creates a new listener object that acts as a proxy for some_object
 listener.listen(prop, callback)
-// Adds a callback on a property change
-listener.listen([prop, ...], callback)
-// Adds a callback to several properties at once
-listener.listen(prop)
-// Removes all callbacks from a given property
+// Adds a callback on a specific property change
+listener.listen(null, callback)
+// Adds a callback on any property change
+listener.listen(prop, callback, {once: true})
+// Adds a one-time callback
 ```
 
 ```js
-text(listener, "property")
-// Returns a text node bound to listener.property
-text(listener)
-// Returns a text node proxy for the listener
-text(listener).property
-// Same as first example
+listener.forget(prop, callback)
+// Removes a specific callback on a specific property
+listener.forget(prop, null)
+// Removes all callbacks from a property
+// Note that undefined won't work, to avoid accidents
+// it really has to be null
+listener.forget(null, callback)
+// This is not a special case, it simply removes a
+// callback that was registered with lisetner.listen(null, callback)
 ```
 
-When called with two arguments, this function returns a new text node that will
-automatically update to reflect the given property on the listener.
-
-When called with only the listener, it creates a proxy object that, when
-indexed, returns the result of calling `text` on the listener and the indexed
-property name.
-
-Note that repeatedly indexing the proxy will return a new text node each time.
-
-## Example
-
-```js
-import Listener from 'listener.js'
-const listener = Listener({})
-
-// Listen for any changed property
-listener.listen("*", (value, prop) => console.log(`${prop} changed to ${value}`))
-
-// Listen only for changes to the foo property
-listener.listen("foo", prop => console.log("it was foo, by the way"))
-
-// Several listeners for one property are possible
-// They will be executed in order of definition
-listener.listen("foo", prop => do_something())
-
-listener.foo = "New Value"
-// Triggers 3 handlers
-
-listener.bar = "New Value"
-// Triggers only the * handler
-```
+Note: Forgetting one-time callbacks is not (yet) possible.

@@ -56,6 +56,25 @@
 </section>
 
 <section>
+	<h2>Listener</h2>
+	<p>
+		Like a normal object, except you can register callbacks for property changes.
+	</p>
+
+	<p>
+		<h3 class="all-unset"><b>Code Sample</b>:</h3>
+		<code-block>
+			import listener from 'listener.js'
+
+			const user = listener({name: "John Doe"})
+			user.listen('name', value =&gt; console.warn(`User name has changed to ${value}`))
+		</code-block>
+	</p>
+
+	<a class="button" href="page/listener.html">Read More</a>
+</section>
+
+<section>
 	<h2>Debounce</h2>
 	<p>
 		Debounces data like user input or events that can occur in a burst.
