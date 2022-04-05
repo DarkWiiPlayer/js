@@ -94,6 +94,17 @@
 			return button
 		</code-block>
 
+		<p>The magic <code>dataset</code> attribute can be used to set values in the object's data-set</p>
+		<p></p>
+		<code-block>
+			return html.div({ dataset: { name: "user" } })
+		</code-block>
+		<code-block>
+			let div = document.createElement("div")
+			div.dataset.name = "user"
+			return div
+		</code-block>
+
 		<p>Adding a <strong>shadow-root</strong> to the new element can be done with the magic <code>shadowRoot</code> property.</p>
 		<p></p>
 		<code-block>
