@@ -136,6 +136,22 @@
 		<code-block>
 			return document.createElement("my-component")
 		</code-block>
+
+		<p>
+			Function arguments will be called on the new element.<br>
+			This can be used to easily add custom initialisation logic to elements.
+		</p>
+		<p></p>
+		<code-block>
+			return html.p("Hello", console.log, ", world!")
+		</code-block>
+		<code-block>
+			const element = document.createElement("p")
+			element.innerText = "Hello"
+			console.log(element)
+			element.innerText += ", world!"
+			return element
+		</code-block>
 	</div>
 </section>
 
