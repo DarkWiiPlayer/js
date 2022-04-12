@@ -139,15 +139,6 @@
 			return div
 		</code-block>
 
-		<p>Custom elements with hyphenated names can be created easily</p>
-		<p></p>
-		<code-block>
-			return html.myComponent()
-		</code-block>
-		<code-block>
-			return document.createElement("my-component")
-		</code-block>
-
 		<p>
 			Function arguments will be called on the new element.<br>
 			This can be used to easily add custom initialisation logic to elements.
@@ -162,6 +153,27 @@
 			console.log(element)
 			element.innerText += ", world!"
 			return element
+		</code-block>
+
+		<p>Custom elements with hyphenated names can be created easily</p>
+		<p></p>
+		<code-block>
+			return html.myComponent()
+		</code-block>
+		<code-block>
+			return document.createElement("my-component")
+		</code-block>
+
+		<p>Custom built-ins can be created with the <code>is</code> attribute.</p>
+		<p></p>
+		<code-block>
+			return html.span({is: "my-span"})
+			// Also sets the `is` attribute, useful for selectors
+			// like span[is="my-span"]
+		</code-block>
+		<code-block>
+			return document.createElement("span", {is: "my-span"})
+			// No actual `is` attribute. GL styling these.
 		</code-block>
 	</div>
 </section>
