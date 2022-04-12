@@ -313,3 +313,17 @@
 		creates that will always point to the newest version of the element.
 	</p>
 </section>
+
+<section>
+	<h2>The <code>empty</code> constant</h2>
+
+	<p>
+		This symbol will be completely ignored when it appears as a children in any skooma generator.
+	</p>
+	<code-block>
+		const name = undefined
+		html.div("name: ", name ?? "") // This will generate an (unnecessary) empty text note
+		html.div("name: ", name ?? null) // This will print a warning to the console (same with undefined)
+		html.div("name: ", name ?? empty) // This will only generate the first text node
+	</code-block>
+</section>
