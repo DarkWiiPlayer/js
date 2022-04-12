@@ -315,6 +315,21 @@
 </section>
 
 <section>
+	<h2>The <code>handle</code> helper</h2>
+
+	<p>
+		This helper function takes an event handler and wraps it in a new
+		function that calls <code>preventDefault</code> on the event before
+		passing it to the original function.
+	</p>
+	<code-block>
+		html.form(html.button({
+			click: handle(event =&gt; console.log("I'm not submitting anything"))
+		}))
+	</code-block>
+</section>
+
+<section>
 	<h2>The <code>empty</code> constant</h2>
 
 	<p>
