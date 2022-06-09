@@ -14,7 +14,6 @@ class CodeBlock extends HTMLElement {
 			.replace(/^\s*\n/, "")
 			.replace(/\n\s*$/, "")
 		let prefix = new RegExp(`(?<![^\n])${content.match(/^\t*/)}`, "g")
-		console.log(prefix)
 		content = content
 			.replace(prefix, "")
 			.replace(/&[a-z]+;/g, str => escapes[str] ?? str)
