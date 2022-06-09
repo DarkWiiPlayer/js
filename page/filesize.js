@@ -1,13 +1,16 @@
 import {text, html} from '../skooma.js'
-import {Better} from '../better.js'
+import element from "/element.js"
 
-class FileSize extends Better {
+element(class FileSize extends HTMLElement {
 	static attributes = {file: true}
 
 	constructor() {
 		super()
 		this.attachShadow({mode: "open"})
-		this.connected.then(self => self.update())
+	}
+
+	connectedCallback() {
+		this.update()
 	}
 
 	fileChanged() {
@@ -24,6 +27,4 @@ class FileSize extends Better {
 				})
 		}
 	}
-}
-
-FileSize.initialise()
+})
