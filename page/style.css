@@ -4,16 +4,16 @@
 	font-family: sans-serif;
 	--color-bg: white;
 	--color-fg: #222;
-	--color-ac: #fbb;
-	--color-hl: #f64;
+	--color-ac: hsl(274deg 100% 90%);
+	--color-hl: hsl(274deg 100% 70%);
 
 	--line-mid: .14rem;
 	--line-thick: .2rem;
+	color: var(--color-fg);
 }
 
 * {
 	box-sizing: border-box;
-	color: var(--color-fg);
 }
 
 body {

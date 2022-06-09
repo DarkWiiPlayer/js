@@ -2,7 +2,7 @@ import {html} from "../skooma.js"
 import {css, variable} from "../css.js"
 import {template} from "../template.js"
 
-document.head.append(html.link({rel: 'stylesheet', href: 'https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.3.1/build/styles/default.min.css'}))
+document.head.append(html.link({rel: 'stylesheet', href: 'https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.3.1/build/styles/github.min.css'}))
 import hljs from 'https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.3.1/build/es/highlight.min.js';
 import javascript from 'https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.3.1/build/es/languages/javascript.min.js';
 hljs.registerLanguage('javascript', javascript);
@@ -27,9 +27,14 @@ customElements.define("code-block", CodeBlock)
 document.head.append(html.style(css({
 	'code-block': {
 		code: {
+			fontSize: CSS.em(1.2),
 			padding: CSS.em(.6),
 			borderRadius: CSS.em(.6),
-			backgroundColor: "#eee",
+			backgroundColor: "#efedff",
+			boxShadow: [
+				[...[.2, .2, .4].map(CSS.em), '#0000000a', 'inset'],
+				[...[.2, .4, .6].map(CSS.em), '#0002'],
+			],
 			border: "none",
 			tabSize: 3,
 			display: "block",
