@@ -1,9 +1,8 @@
 const diversify = (prefix, now, ...rest) =>
 	now
 		? now.split(/, */g)
-			.map(current => current.replace(/\$/g, '.'))
-			.map(current => current[0] == "_"
-				? diversify(prefix+current.slice(1), ...rest)
+			.map(current => current.match(/\$/)
+				? diversify(current.replaceAll(/\$/g, prefix), ...rest)
 				: diversify(prefix+' '+current, ...rest)
 			).join(",")
 		: prefix

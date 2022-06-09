@@ -48,7 +48,7 @@ document.head.append(html.style(css({
 		],
 		cursor: "pointer",
 	},
-	$top: {
+	'.top': {
 		"scroll-to-top": {
 			opacity: 0,
 			transform: `translate(0px, ${CSS.em(radius * 2)})`,
