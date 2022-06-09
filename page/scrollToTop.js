@@ -1,4 +1,4 @@
-import element from "/element.js"
+import element from "../element.js"
 import {css, variable as v} from "../css.js"
 
 element(class ScrollToTop extends HTMLElement {
