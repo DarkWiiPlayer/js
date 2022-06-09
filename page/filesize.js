@@ -1,5 +1,5 @@
 import {text, html} from '../skooma.js'
-import element from "/element.js"
+import element from "../element.js"
 
 element(class FileSize extends HTMLElement {
 	static attributes = {file: true}
