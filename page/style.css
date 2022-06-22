@@ -62,29 +62,40 @@ hr {
 	margin: 1em 0;
 }
 
-.button {
+a.fancy {
 	--color-primary: var(--color-hl);
 	--color-secondary: white;
 	--color-shadow: #0004;
-	display: inline-block;
-	transition: all .3s;
-	cursor: pointer;
-	border-radius: .3em;
-	border: var(--line-mid) var(--color-primary) solid;
-	padding: .2em .6em;
-	text-decoration: none;
 	color: var(--color-primary);
+	cursor: pointer;
+	display: inline-block;
 	font-weight: bold;
+	padding: .0em .2em;
+	position: relative;
+	text-decoration: none;
+	transition: all .3s;
 }
-.button.important {
-	--color-primary: var(--color-hl);
-	--color-secondary: white;
+a.fancy::before {
+	content: '';
+	display: block;
+	position: absolute;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	height: .1em;
+	background: var(--color-primary);
+	transition: all .3s;
+	z-index: -1;
 }
 
-.button:hover {
+a.fancy:hover {
 	color: var(--color-secondary);
-	background-color: var(--color-primary);
 	text-shadow: .2em .3em .2em var(--color-shadow);
+}
+
+a.fancy:hover::before {
+	height: 100%;
+	border-radius: .2em;
 }
 
 pre>code {
