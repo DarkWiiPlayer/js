@@ -246,6 +246,19 @@
 </section>
 
 <section>
+	<h2>The <code>fragment</code> helper</h2>
+
+	<p>
+		This helper simply collects its arguments into a document fragment.
+		One may think of it as <code>Array.from</code>, except it collects HTML elements into a fragment instead.
+	</p>
+	<code-block>
+		const list = ["b", "i", "u"].map(name =&gt; html.[name](name))
+		return text`Some ${fragment(...list)} other text`
+	</code-block>
+</section>
+
+<section>
 	<h2>The <code>bind</code> helper</h2>
 
 	<dl>
