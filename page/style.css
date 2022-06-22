@@ -45,7 +45,8 @@ h2 {
 }
 
 h3::before {
-	content: "\2023" ' ';
+	content: "\2023";
+	margin-right: .6ch;
 	color: var(--color-ac);
 }
 
@@ -151,3 +152,14 @@ dl>code>dt~dd { grid-column: 2/2; }
 
 .all-unset { all: unset; }
 .full-width { grid-column: 1/-1; }
+
+table-of-contents ul {
+	list-style: none;
+	padding: 0;
+}
+
+table-of-contents ul li::before {
+	content: "\2023";
+	color: var(--color-hl);
+	margin-right: 1ch;
+}
