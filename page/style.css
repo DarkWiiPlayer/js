@@ -2,7 +2,7 @@
 
 :root {
 	font-family: sans-serif;
-	--color-bg: white;
+	--color-bg: #eef0f2;
 	--color-fg: #222;
 	--color-ac: hsl(274deg 100% 90%);
 	--color-hl: hsl(274deg 100% 70%);
@@ -23,11 +23,14 @@ body {
 	flex-flow: column;
 	align-items: center;
 	padding: 1em 2em;
+	color: #333;
+	background: var(--color-bg);
 }
 
 body>section {
 	width: 100%;
 	max-width: 60em;
+	margin-top: 1em;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -61,7 +64,8 @@ hr {
 
 .button {
 	--color-primary: var(--color-hl);
-	--color-secondary: var(--color-bg);
+	--color-secondary: white;
+	--color-shadow: #0004;
 	display: inline-block;
 	transition: all .3s;
 	cursor: pointer;
@@ -72,11 +76,15 @@ hr {
 	color: var(--color-primary);
 	font-weight: bold;
 }
+.button.important {
+	--color-primary: var(--color-hl);
+	--color-secondary: white;
+}
 
 .button:hover {
 	color: var(--color-secondary);
 	background-color: var(--color-primary);
-	text-shadow: .2em .3em .2em #0004;
+	text-shadow: .2em .3em .2em var(--color-shadow);
 }
 
 pre>code {

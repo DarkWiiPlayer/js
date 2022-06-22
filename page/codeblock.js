@@ -26,17 +26,17 @@ customElements.define("code-block", CodeBlock)
 document.head.append(html.style(css({
 	'code-block': {
 		code: {
-			fontSize: CSS.em(1.2),
-			padding: CSS.em(.6),
+			//backgroundColor: "#00000006",
+			backgroundColor: "#fff4",
 			borderRadius: CSS.em(.6),
-			backgroundColor: "#efedff",
+			border: 'none',
 			boxShadow: [
-				[...[.2, .2, .4].map(CSS.em), '#0000000a', 'inset'],
-				[...[.2, .4, .6].map(CSS.em), '#0002'],
+				[...[.2, .4, .6].map(CSS.em), '#0003'],
 			],
-			border: "none",
-			tabSize: 3,
 			display: "block",
+			fontSize: CSS.em(1.2),
+			padding: [[.8, 1.2].map(CSS.em)],
+			tabSize: 3,
 		}
 	}
 })))
