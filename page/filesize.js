@@ -27,7 +27,7 @@ element(class FileSize extends HTMLElement {
 				.then(response=>response.arrayBuffer())
 				.then(buffer => buffer.byteLength)
 				.then(length => {
-					this.shadowRoot.replaceChildren(text`${fragment(...this.cloneChildren())} (${length} Bytes unminified)`)
+					this.shadowRoot.replaceChildren(text`${html.slot()} (${length} Bytes unminified)`)
 				})
 		}
 	}
