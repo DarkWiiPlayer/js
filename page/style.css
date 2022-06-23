@@ -193,3 +193,29 @@ a.back::before {
 	margin-right: .8em;
 	transform: scale(2, 1);
 }
+
+.ribbon {
+	--color: var(--color-hl);
+	left: 0;
+	top: 0;
+	position: fixed;
+	transform: rotate(315deg) translate(-5.4em);
+
+	background-color: var(--color);
+	border: .16em dashed #ffffff;
+	color: #ffffff;
+	font-family: sans-serif;
+	font-size: .8rem;
+	letter-spacing: .1em;
+	line-height: 1.4em;
+	padding: .2em 5em;
+	text-decoration: none;
+	white-space: nowrap;
+
+	box-shadow:
+		0 0 0 3px var(--color),
+		0 0 20px -3px rgba(0, 0, 0, 0.5);
+	text-shadow:
+		0 0 0 #ffffff,
+		0 0 5px rgba(0, 0, 0, 0.3);
+}
