@@ -163,3 +163,33 @@ table-of-contents ul li::before {
 	color: var(--color-hl);
 	margin-right: 1ch;
 }
+
+a.back {
+	--margin: .6em;
+
+	color: var(--color-hl);
+	text-decoration: none;
+	padding: .2em;
+	padding-top: .3em;
+	padding-right: .4em;
+	position: absolute;
+	top: var(--margin);
+	left: var(--margin);
+	border-radius: .3em;
+}
+
+a.back:hover {
+	color: white;
+	background: var(--color-hl);
+}
+
+a.back::before {
+	display: inline-block;
+	content: '';
+	width: 0;
+	height: 0;
+	border: solid transparent .4em;
+	border-color: transparent currentcolor transparent transparent;
+	margin-right: .8em;
+	transform: scale(2, 1);
+}
