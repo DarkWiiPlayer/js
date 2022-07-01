@@ -10,6 +10,7 @@ const apply = (func, node) => {
 
 export const use = node => {
 	const code = Function("return (" + node.getAttribute("use") + ")")
+	node.removeAttribute("use")
 	const func = code()
 	apply(func, node)
 }
