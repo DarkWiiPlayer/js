@@ -8,10 +8,11 @@ copy-pasting around more often than necessary.
 
 So what does it all do?
 
-## Better
+## Skooma
 
-an "improved" version of the builtin HTMLElement that's hopefully a lot easier
-to build actual things with. It's really just another utility layer.
+Generate HTML and SVG DOM nodes more easily and do stuff with them. Feels like
+an in-between of using a templating language and writing lisp code. Overall very
+recommendable.
 
 ## Element
 
@@ -32,11 +33,9 @@ changed.
 
 Simple messaging helper that uses microtasks by default.
 
-## Skooma
+## Debounce
 
-Generate HTML and SVG DOM nodes more easily and do stuff with them. Feels like
-an in-between of using a templating language and writing lisp code. Overall very
-recommendable.
+Debouncing wrapper for functions to avoid repeated execution of expensive code.
 
 ## Template
 
@@ -47,4 +46,13 @@ like 5 lines or so.
 
 Currently a sngle class `ObjectStorage` implementing the API of the Storage
 class using a plain JS Map as backend. This is mostly meant as a page-local
-fallback to LocalStorage and SessionStorage
+fallback to LocalStorage and SessionStorage.
+
+## Use
+
+Allows you to apply code to HTML elements by looking for a `use` attribute and
+running it as code on the element.
+
+## Pqueue
+
+Ensures in-order promise resolution and optionally limits parallel execution.
