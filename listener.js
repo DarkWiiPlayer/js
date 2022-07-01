@@ -4,8 +4,8 @@ properties and react accordingly.
 
 Example:
 	const l = listener()
-	l.listen("contract", contract => speaker.handle(contract))
-	l.contract = new Contract()
+	l.listen("contract", contract => speaker.speak(contract))
+	l.contract = Sithis.getNewContract()
 */
 
 const registry = new Map()
