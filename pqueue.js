@@ -1,3 +1,14 @@
+// Promise Queue
+// Wraps promises to make sure they resolve in the order they were wrapped.
+// 
+// Usage example:
+// - Some asynchronous process starts fetching pages from a server in order
+// - New requests may start before previous ones are finished
+// - With some bad luck, page M may load before page N < M
+// This means you can't just append pages as they arrive.
+// PQueue will make sure promise M never resolves before promise N.
+
+// Wrap a promise to make its state queryable
 const queryable = promise => {
 	let result = promise.then(result => {
 		q.result = result
@@ -9,6 +20,7 @@ const queryable = promise => {
 	return result
 }
 
+// Integer => Promise => Promise
 export default (parallel = 1) => {
 	const running = []
 	const waiting = []
