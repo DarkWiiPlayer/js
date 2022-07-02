@@ -1,0 +1,88 @@
+
+<link rel="stylesheet" href="style.css">
+
+<script type="module" src="codeblock.js"></script>
+<script type="module" src="scrollToTop.js"></script>
+
+<scroll-to-top>
+</scroll-to-top>
+
+<a class="back" href="..">Module Index</a>
+
+<h1 class="js module">speaker.js</h1>
+
+<code-block>import {Speaker} from 'speaker.js'</code-block>
+
+<section>
+	<h2>Description</h2>
+	<p>
+		A publish/subscribe helper class that uses micro-tasks to relay messages to many subscribers.
+	</p>
+</section>
+
+<section>
+	<h2>Example</h2>
+
+	<code-block>
+		const speaker = new Speaker()
+		speaker.listen(message =&gt; { document.title = message })
+		speaker.listen(message =&gt; { console.log(`Message received: ${message}`) })
+
+		speaker.speak("New page title")
+		console.log("This line runs before any of the callbacks")
+	</code-block>
+
+	<p>
+		Note that the callbacks don't run immediately.
+		They are scheduled to a micro-task to be called later on.
+	</p>
+
+</section>
+
+<section>
+	<h2>Methods</h2>
+	<dl>
+		<dt><code>new Speaker(...initial) : Speaker</code></dt>
+		<dd>
+			Constructs a new speaker.
+			All arguments passed to the constructor will be retained and returned
+			by any call to <code>listen</code> before the first time <code>speak</code>
+			is called.
+		</dd>
+
+		<dt><code>Speaker.listen(callback : (...args) =&gt; undefined) : [...args]</code></dt>
+		<dd>
+			Registers a callback to be called on every new message.
+			Returns an array containing the retained arguments of the last message.
+		</dd>
+
+		<dt><code>Speaker.speak(...args)</code></dt>
+		<dd>
+			Relays a message of zero or more arguments to all registered callbacks.
+			As mentioned above, callbacks will not be called immediately, but scheduled in a new micro-task.
+			The arguments are retained until <code>speak</code> is called again.
+		</dd>
+
+		<dt><code>Speaker.forget(callback)</code></dt>
+		<dd>
+			Removes a single callback function from its list of callbacks.
+		</dd>
+
+		<dt><code>Speaker.silence()</code></dt>
+		<dd>
+			Clears the list of callbacks completely.
+		</dd>
+	</dl>
+</section>
+
+<section>
+	<h2>Immediate Speaker</h2>
+	<p>
+		Additionally, the module exposts the <code>ImmediateSpeaker</code> class,
+		which does the exact same as a normal speaker,
+		but executes its callbacks immediately instead of scheduling a micro-task.
+	</p>
+	<p>
+		The API is the <em>exact same</em> as a normal <code>Speaker</code>.
+	</p>
+</section>

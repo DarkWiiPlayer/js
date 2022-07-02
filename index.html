@@ -15,6 +15,8 @@
 	<p style="text-align: center;">
 		A collection of <em>JavaScript modules</em> to make <em>front-end</em> easier.
 	</p>
+	<p>
+	</p>
 </section>
 
 <section>
@@ -78,6 +80,22 @@
 			const user = listener({name: "John Doe"})
 			user.listen('name', value =&gt; console.warn(`User name has changed to ${value}`))
 		</code-block>
+	</p>
+</section>
+
+<section>
+	<h2>Speaker</h2>
+	<p>
+		Publish and subscribe to messages, relayed via micro-tasks.
+		<a class="fancy" href="page/speaker.html">Read More</a>
+
+		<code-block>
+			const speaker = new Speaker()
+			speaker.listen((...args) =&gt; console.log(...args))
+			speaker.speak("First", "second", "third")
+		</code-block>
+
+		No, this has nothing to do with playing audio.
 	</p>
 </section>
 
