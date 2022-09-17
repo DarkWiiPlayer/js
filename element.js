@@ -46,7 +46,7 @@ export default Class => {
 			if (typeof prop.value == "function") {
 				Class.queues = new WeakMap()
 				Class.prototype[name.slice(1)] = function(...args) {
-					const queue = Class.queues.has(this) ? queues.get(this) : []
+					const queue = Class.queues.has(this) ? Class.queues.get(this) : []
 					if (!queue.length) queueMicrotask(() => {
 						this[name](...queue)
 						queue.length = 0
