@@ -8,7 +8,7 @@ Example:
 	l.contract = Sithis.getNewContract()
 */
 
-const registry = new Map()
+const registry = new WeakMap()
 const listener = (target={}) => {
 	const callbacks = new Map()
 	const methods = Object.create(null)
