@@ -66,33 +66,19 @@
 </section>
 
 <section>
-	<h2>Listener</h2>
+	<h2>State</h2>
 	<p>
-		Like a normal object, except you can register callbacks for property changes.
-		<a class="fancy" href="page/listener.html">Read More</a>
-	</p>
-
-	<p>
-		<h3 class="all-unset"><b>Code Sample</b>:</h3>
-		<code-block>
-			import listener from 'listener.js'
-
-			const user = listener({name: "John Doe"})
-			user.listen('name', value =&gt; console.warn(`User name has changed to ${value}`))
-		</code-block>
-	</p>
-</section>
-
-<section>
-	<h2>Speaker</h2>
-	<p>
-		Publish and subscribe to messages, relayed via micro-tasks.
-		<a class="fancy" href="page/speaker.html">Read More</a>
+		Utility class to monitor state changes on an object using a Proxy and events.
+		Changes are batched and processed in a microtask.
+		<a class="fancy" href="page/state.html">Read More</a>
 
 		<code-block>
-			const speaker = new Speaker()
-			speaker.listen((...args) =&gt; console.log(...args))
-			speaker.speak("First", "second", "third")
+			const state = new State()
+			speaker.meepChanged = value => console.log(`meep ${value}`)
+			state.proxy.meep = "Heat from fire"
+			state.proxy.meep = "Fire from heat"
+			state.proxy.meep = "moop"
+			// outputs: "meep moop"
 		</code-block>
 
 		No, this has nothing to do with playing audio.

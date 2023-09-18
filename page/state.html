@@ -1,0 +1,91 @@
+<link rel="stylesheet" href="style.css">
+
+<script type="module" src="codeblock.js"></script>
+<script type="module" src="scrollToTop.js"></script>
+
+<scroll-to-top>
+</scroll-to-top>
+
+<a class="back" href="..">Module Index</a>
+
+<h1 class="js module">listener.js</h1>
+
+<code-block>import {State} from 'state.js'</code-block>
+
+<section>
+	<h2>Description</h2>
+	<p>
+		State objects emit an event whenever a property gets written to on their associated Proxy.
+	</p>
+
+	<p>
+		By default, state changes are only queued up and processed in a microtask, allowing for batch-processing.<br>
+		This means that for repeated changes to the same property, the user can decide to process all the changes in one go or even discard everything but the last value of each property.<br>
+		That way one can easily avoid some types of unnecessary redraws, network requests, etc.
+	</p>
+
+	<p>
+		To make code more readable, the constructor defaults to adding an event listener that checks for a method called [prop]<code>Changed</code> in the state object, and calls it with the new value. This behaviour can be disabled by setting the <code>methods</code> option to false.
+	</p>
+
+	<p>
+		The state object also has a getter and setter pair for the `state` attribute, which simply accesses this same attribute on the proxy object.
+		This is simply a convenience feature to save some typing on single-variable states.
+	</p>
+</section>
+
+<section>
+	<h2>Options</h2>
+	<p>
+		<dl>
+			<dt><code>defer</code></dt>
+			<dd>Set to false to disable defered change processing. This will emit a new event every time something changes, even if it's about to be changed again in the next line.</dd>
+			<dt><code>methods</code></dt>
+			<dd>Set to false to disable the default event listener that attempts to call a [prop]Changed method on the state object.</dd>
+		</dl>
+	</p>
+</section>
+
+<section>
+	<h2>Examples</h2>
+
+	<p>
+		A simple counter state that prints a new count to the console every time it gets updated.
+	</p>
+
+	<code-block>
+		const counter = new State({state: 0}, {defer: false})
+
+		counter.stateChanged = (count) =&gt; console.log(`new count: ${count}`)
+
+		counter.state += 1
+		counter.state += 1
+		counter.state += 1
+	</code-block>
+
+	<p>
+		This example uses an event listener instead to get notified of all property changes.
+		Collecting changes into a map is an easy way of de-duplicating their values and keeping only the last one.
+	</p>
+
+	<code-block>
+		const state = new State({}, {methods: false})
+
+		state.addEventListener("change", event =&gt; {
+			console.log(`There were ${event.changes.length} changes.`)
+			new Map(event.changes).forEach((value, prop) => {
+				console.log(`Final vaue of ${prop}: ${value}`)
+			})
+		})
+
+		state.proxy.foo = "foo 1"
+		state.proxy.foo = "foo 2"
+		state.proxy.bar = "bar 1"
+		state.proxy.foo = "foo 3"
+		state.proxy.bar = "bar 2"
+
+		// There were 5 changes.
+		// Final vaue of foo: foo 3
+		// Final vaue of bar: bar 2
+	</code-block>
+</section>

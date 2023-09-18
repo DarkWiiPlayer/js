@@ -24,12 +24,21 @@ support inheriting from other classes for extending builtin elements.
 Generate CSS from JS objects. Yes, you can generate CSS from JSON now. Or from
 YAML. Or from whatever you want, really.
 
+## State
+
+Combines both Listener and Speaker into one convenient class that batches and
+defers changes by default.
+
 ## Listener
+
+(Deprecated; use `State` instead)
 
 A proxy object that fires a callback when certain (or all) properties are
 changed.
 
 ## Speaker
+
+(Deprecated; use `State` instead)
 
 Simple messaging helper that uses microtasks by default.
 

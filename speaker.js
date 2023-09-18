@@ -15,8 +15,8 @@ export class Speaker {
 	speak(...args) {
 		if (!this._scheduled.length) {
 			queueMicrotask(() => {
-				for (let args of this._scheduled) {
-					for (let callback of this._callbacks) {
+				for (const args of this._scheduled) {
+					for (const callback of this._callbacks) {
 						callback(...args)
 					}
 					this._retain = args
@@ -28,7 +28,7 @@ export class Speaker {
 	}
 
 	forget(callback) {
-		this._callbacks.delete(callbacks)
+		this._callbacks.delete(callback)
 	}
 
 	silence() {
@@ -38,7 +38,7 @@ export class Speaker {
 
 export class ImmediateSpeaker extends Speaker {
 	speak(...args) {
-		for (let callback of this._callbacks) {
+		for (const callback of this._callbacks) {
 			callback(...args)
 		}
 		this._retain = args
