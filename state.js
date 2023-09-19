@@ -25,6 +25,8 @@ export class State extends EventTarget {
 
 		this.addEventListener
 
+		// Try running a "<name>Changed" method for every changed property
+		// Can be disabled to maybe squeeze out some performance
 		if (options.methods ?? true) {
 			this.addEventListener("change", ({changes}) => {
 				new Map(changes).forEach((value, prop) => {
@@ -34,9 +36,11 @@ export class State extends EventTarget {
 		}
 	}
 
+	// When you only need one value, you can skip the proxy.
 	set value(value) { this.proxy.value = value }
 	get value() { return this.proxy.value }
 
+	// Anounces that a prop has changed
 	emit(prop, value) {
 		if (this.#options.defer ?? true) {
 			if (!this.#queue) {
@@ -84,6 +88,7 @@ export class StoredState extends State {
 				this.emit(key, value)
 		}
 
+		// Listen for changes from other windows
 		addEventListener("storage", event => {
 			let prop = event.key
 			if (prop === this.#valueKey) prop = 'value'
