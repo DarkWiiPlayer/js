@@ -9,13 +9,18 @@ export class State extends EventTarget {
 	#target
 	#options
 	#queue
+
 	constructor(target={}, options={}) {
 		super()
 		this.#options = options
 		this.#target = target
 		this.proxy = new Proxy(target, {
-			set: (_target, prop, value) => { this.set(prop, value); return true },
-			get: (target, prop) => target[prop],
+			set: (_target, prop, value) => {
+				this.emit(prop, value)
+				this.set(prop, value)
+				return true
+			},
+			get: (_target, prop) => this.get(prop),
 		})
 
 		this.addEventListener
@@ -29,10 +34,10 @@ export class State extends EventTarget {
 		}
 	}
 
-	set state(value) { this.proxy.state = value }
-	get state() { return this.proxy.state }
+	set value(value) { this.proxy.value = value }
+	get value() { return this.proxy.value }
 
-	set(prop, value) {
+	emit(prop, value) {
 		if (this.#options.defer ?? true) {
 			if (!this.#queue) {
 				this.#queue = []
@@ -42,11 +47,58 @@ export class State extends EventTarget {
 				})
 			}
 			this.#queue.push([prop, value])
-			this.#target[prop] = value
 		} else {
-			this.#target[prop] = value
 			this.dispatchEvent(new ChangeEvent([prop, value]))
 		}
+	}
+
+	set(prop, value) {
+		this.#target[prop] = value
+	}
+
+	get(prop) {
+		return this.#target[prop]
+	}
+}
+
+export class StoredState extends State {
+	#storage
+	#valueKey
+
+	constructor(init, options={}) {
+		super({}, options)
+		this.#storage = options.storage ?? localStorage
+		this.#valueKey = options.key ?? 'value'
+
+		// Initialise storage from defaults
+		for (const [key, value] of Object.entries(init)) {
+			if (this.#storage[key] == undefined)
+				this.set(key, value)
+		}
+
+		// Emit change events for any changed keys
+		for (let i=0; i<this.#storage.length; i++) {
+			const key = this.#storage.key(i)
+			const value = this.#storage[key]
+			if (value !== JSON.stringify(init[key]))
+				this.emit(key, value)
+		}
+
+		addEventListener("storage", event => {
+			let prop = event.key
+			if (prop === this.#valueKey) prop = 'value'
+			this.emit(prop, event.newValue)
+		})
+	}
+
+	set(prop, value) {
+		if (prop == "value") prop = this.#valueKey
+		this.#storage[prop] = JSON.stringify(value)
+	}
+
+	get(prop) {
+		if (prop == "value") prop = this.#valueKey
+		return JSON.parse(this.#storage[prop])
 	}
 }
 
