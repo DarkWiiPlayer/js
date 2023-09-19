@@ -67,7 +67,7 @@ export default (parallel = 1) => {
 	// Loop until there is nothing more to do:
 	// a) Running queue is full and nothing can be resolved
 	// b) Waiting queue is empty
-	const spin = () => { while pump() {} }
+	const spin = () => { while (pump()) {} }
 
 	return promise => {
 		waiting.push(promise)
