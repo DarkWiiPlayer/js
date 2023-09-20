@@ -1,7 +1,14 @@
 export class ChangeEvent extends Event {
+	#final
 	constructor(...changes) {
 		super('change')
 		this.changes = changes
+	}
+	get final() {
+		if (!this.#final) {
+			this.#final = new Map(changes)
+		}
+		return this.#final
 	}
 }
 
@@ -50,8 +57,8 @@ export class State extends EventTarget {
 		// Try running a "<name>Changed" method for every changed property
 		// Can be disabled to maybe squeeze out some performance
 		if (options.methods ?? true) {
-			this.addEventListener("change", ({changes}) => {
-				new Map(changes).forEach((value, prop) => {
+			this.addEventListener("change", ({final}) => {
+				final.forEach((value, prop) => {
 					if (`${prop}Changed` in this) this[`${prop}Changed`](value)
 				})
 			})
