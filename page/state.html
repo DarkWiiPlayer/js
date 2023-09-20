@@ -97,13 +97,6 @@
 		The <code>StorageState</code> subclass of <code>State</code> implements the same API but is backed by a
 		<a href="https://developer.mozilla.org/en-US/docs/Web/API/Storage"><code>Storage</code></a> object.
 	</p>
-
-	<p>
-		This comes with the disadvantage that all values must be stored in a
-		serialised form, which won't work for all data and will break identity.
-		Specifically, all values are converted to JSON strings for storage.
-	</p>
-
 	<p>
 		By default, <code>StorageState</code> uses the
 		<code>window.localStorage</code> object, but you can change this by
@@ -131,6 +124,25 @@
 
 		console.log(sessionStorage.value)    // udnefined
 		console.log(sessionStorage.greeting) // "Hello, World!"
+	</code-block>
+
+	<p>
+		Using a storage object comes with the disadvantage that all values must
+		be stored in a serialised form, which won't work for all data and will
+		break identity. Specifically, all values are converted to JSON strings
+		for storage.
+	</p>
+
+	<code-block>
+		const plainState = new State({})
+		const storageState = new StorageState({})
+
+		const object = {}
+		plainState.value = object
+		storageState.value = object
+
+		console.log(plainState.value == object) // true
+		console.log(storageState.value == object) // false
 	</code-block>
 </section>
 
