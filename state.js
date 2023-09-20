@@ -87,6 +87,16 @@ export class State extends EventTarget {
 	}
 }
 
+export class StorageChangeEvent extends Event {
+	constructor(storage, key, value, targetState) {
+		super("storagechange")
+		this.storageArea = storage
+		this.key = key
+		this.newValue = value
+		this.targetState = targetState
+	}
+}
+
 export class StoredState extends State {
 	#storage
 	#valueKey
@@ -97,9 +107,10 @@ export class StoredState extends State {
 		this.#valueKey = options.key ?? 'value'
 
 		// Initialise storage from defaults
-		for (const [key, value] of Object.entries(init)) {
-			if (this.#storage[key] == undefined)
-				this.set(key, value)
+		for (let [prop, value] of Object.entries(init)) {
+			if (prop === this.#valueKey) prop = 'value'
+			if (this.#storage[prop] == undefined)
+				this.set(prop, value)
 		}
 
 		// Emit change events for any changed keys
@@ -111,16 +122,22 @@ export class StoredState extends State {
 		}
 
 		// Listen for changes from other windows
-		addEventListener("storage", event => {
-			let prop = event.key
-			if (prop === this.#valueKey) prop = 'value'
-			this.emit(prop, JSON.parse(event.newValue))
-		})
+		const handler = event => {
+			if (event.targetState !== this && event.storageArea == this.#storage) {
+				let prop = event.key
+				if (prop === this.#valueKey) prop = 'value'
+				this.emit(prop, JSON.parse(event.newValue))
+			}
+		}
+		addEventListener("storage", handler)
+		addEventListener("storagechange", handler)
 	}
 
 	set(prop, value) {
 		if (prop == "value") prop = this.#valueKey
-		this.#storage[prop] = JSON.stringify(value)
+		const json = JSON.stringify(value)
+		dispatchEvent(new StorageChangeEvent(this.#storage, prop, json, this))
+		this.#storage[prop] = json
 	}
 
 	get(prop) {

@@ -99,11 +99,9 @@
 	</p>
 
 	<p>
-		This comes with a series of limitations:
-		<ul>
-			<li>Two <code>StorageState</code>s backed by the same <code>Storage</code> object won't be notified of each other's changes.</li>
-			<li>As only strings can be stored, the library converts all values to and from JSON.</li>
-		</ul>
+		This comes with the disadvantage that all values must be stored in a
+		serialised form, which won't work for all data and will break identity.
+		Specifically, all values are converted to JSON strings for storage.
 	</p>
 
 	<p>
