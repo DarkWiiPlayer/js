@@ -89,3 +89,60 @@
 		// Final vaue of bar: bar 2
 	</code-block>
 </section>
+
+<section>
+	<h2>Storage-backed states</h2>
+
+	<p>
+		The <code>StorageState</code> subclass of <code>State</code> implements the same API but is backed by a
+		<a href="https://developer.mozilla.org/en-US/docs/Web/API/Storage"><code>Storage</code></a> object.
+	</p>
+
+	<p>
+		This comes with a series of limitations:
+		<ul>
+			<li>Two <code>StorageState</code>s backed by the same <code>Storage</code> object won't be notified of each other's changes.</li>
+			<li>As only strings can be stored, the library converts all values to and from JSON.</li>
+		</ul>
+	</p>
+
+	<p>
+		By default, <code>StorageState</code> uses the
+		<code>window.localStorage</code> object, but you can change this by
+		passing the <code>storage</code> option in the constructor.
+	</p>
+
+	<p>
+		When using the <code>value</code> short-hand to have a different
+		<code>StorageState</code> for every individual value, these would
+		all override the same key in the storage. To remedy this, the
+		<code>key</code> option can be used to redirect reads and writes
+		of the <code>"value"</code> key to a different key in the storage.
+	</p>
+
+	<code-block>
+		const greeting = new StorageState({}, {
+			storage = sessionStorage,
+			key: 'greeting'
+		})
+
+		greeting.valueChanged = newValue =&gt;
+			console.log(`Greeting has changed: ${newValue}`)
+
+		greeting.value = "Hello, World!"
+
+		console.log(sessionStorage.value)    // udnefined
+		console.log(sessionStorage.greeting) // "Hello, World!"
+	</code-block>
+</section>
+
+<section>
+	<h2>Map-backed Storage</h2>
+
+	<p>
+		When a fallback option is needed, for example to support clients without
+		<code>localStorage</code> without breaking the page, the
+		<code>MapStorage</code> object implements the <code>Storage</code> API
+		and is backed by a plain JavaScript <code>Map</code> object.
+	</p>
+</section>
