@@ -5,6 +5,28 @@ export class ChangeEvent extends Event {
 	}
 }
 
+export class MapStorage extends Storage {
+	#map = new Map()
+	key(index) {
+		return [...this.#map.keys()][index]
+	}
+	getItem(keyName) {
+		if (this.#map.has(keyName))
+			return this.#map.get(keyName)
+		else
+			return null
+	}
+	setItem(keyName, keyValue) {
+		this.#map.set(keyName, String(keyValue))
+	}
+	removeItem(keyName) {
+		this.#map.delete(keyName)
+	}
+	clear() {
+		this.#map.clear()
+	}
+}
+
 export class State extends EventTarget {
 	#target
 	#options
