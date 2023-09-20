@@ -93,7 +93,7 @@ export class StoredState extends State {
 
 	constructor(init, options={}) {
 		super({}, options)
-		this.#storage = options.storage ?? localStorage
+		this.#storage = options.storage ?? localStorage ?? new MapStorage()
 		this.#valueKey = options.key ?? 'value'
 
 		// Initialise storage from defaults
@@ -114,7 +114,7 @@ export class StoredState extends State {
 		addEventListener("storage", event => {
 			let prop = event.key
 			if (prop === this.#valueKey) prop = 'value'
-			this.emit(prop, event.newValue)
+			this.emit(prop, JSON.parse(event.newValue))
 		})
 	}
 
