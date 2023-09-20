@@ -6,7 +6,7 @@ export class ChangeEvent extends Event {
 	}
 	get final() {
 		if (!this.#final) {
-			this.#final = new Map(changes)
+			this.#final = new Map(this.changes)
 		}
 		return this.#final
 	}
@@ -115,8 +115,8 @@ export class StoredState extends State {
 
 		// Initialise storage from defaults
 		for (let [prop, value] of Object.entries(init)) {
-			if (prop === this.#valueKey) prop = 'value'
-			if (this.#storage[prop] == undefined)
+			if (prop === 'value') prop = this.#valueKey
+			if (this.#storage[prop] === undefined)
 				this.set(prop, value)
 		}
 
