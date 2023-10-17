@@ -6,9 +6,9 @@ export default Class => {
 	const props = []
 
 	Object.entries(attributes).forEach(([name, attribute]) => {
-		let htmlName = name.replace(/([a-z])([A-Z])/g, "$1-$2").toLowerCase()
+		const htmlName = name.replace(/([a-z])([A-Z])/g, "$1-$2").toLowerCase()
 		props.push(htmlName)
-		let prop = {}
+		const prop = {}
 
 		prop.get = typeof attribute.get == "function"
 			? function() { return attribute.get.call(this, this.getAttribute(htmlName)) }
@@ -17,7 +17,7 @@ export default Class => {
 		prop.set = typeof attribute.set == "function"
 			? function(val) { return this.setAttribute(htmlName, attribute.set.call(this, val)) }
 			: attribute.set === false
-			? function(val) { throw(Error(`Attribute ${name} cannot be set`)) }
+			? function() { throw(Error(`Attribute ${name} cannot be set`)) }
 			: function(val) { this.setAttribute(htmlName, val) }
 
 		Object.defineProperty(proto, name, prop)
@@ -33,9 +33,20 @@ export default Class => {
 	})
 
 	Class.prototype.attributeChangedCallback = function(name, oldValue, newValue) {
-		name = name.replaceAll(/-(.)/g, (a, b) => b.toUpperCase())
-		if (`${name}Changed` in this) this[`${name}Changed`](oldValue, newValue)
-		if (`changed` in this) this.changed(name, oldValue, newValue)
+		name = name.replaceAll(/-(.)/g, (_, b) => b.toUpperCase())
+		const get_transform = attributes[name]?.get
+		if (`${name}Changed` in this) {
+			if (typeof get_transform == "function")
+				return this[`${name}Changed`](get_transform(oldValue), get_transform(newValue))
+			else
+				return this[`${name}Changed`](oldValue, newValue)
+		}
+		if (`changed` in this) {
+			if (typeof get_transform == "function")
+				return this.changed(name, get_transform(oldValue), get_transform(newValue))
+			else
+				return this.changed(name, oldValue, newValue)
+		}
 	}
 
 	/* Enable batch-processing for dollar-methods */
@@ -54,7 +65,7 @@ export default Class => {
 					queue.push(args)
 					Class.queues.set(this, queue)
 				}
-			};
+			}
 		}
 	}
 
